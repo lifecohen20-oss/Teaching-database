@@ -769,6 +769,30 @@
       transform: scale(0.97);
     }
 
+    .secondary-btn {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--border);
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      margin-top: 12px;
+    }
+
+    .secondary-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
     .secondary-link {
       display: inline-block;
       margin-top: 20px;
@@ -851,8 +875,9 @@
   <div class="modal-box">
     <div class="modal-icon"><i class="fa-brands fa-google"></i></div>
     <h1 class="modal-title">התחברות לארכיון</h1>
-    <p class="modal-text">מערכת זו דורשת אימות. יש להתחבר עם חשבון Google לאישור גישה לקבצים הפרטיים.</p>
+    <p class="modal-text">כדי לצפות בקבצים פרטיים בארכיון, יש צורך בהתחברות לאישור הרשאות מול גוגל.</p>
     <button id="authBtn" class="primary-btn"><i class="fa-solid fa-shield-halved"></i> התחברות באמצעות Google</button>
+    <button id="skipAuthBtn" class="secondary-btn"><i class="fa-solid fa-arrow-left"></i> המשך ללא התחברות (לקבצים ציבוריים)</button>
   </div>
 </div>
 
@@ -1014,6 +1039,7 @@ let state = {
   sort: 'folder,name',
   recentFolders: [],
   accessToken: null,
+  skippedAuth: false, // מזהה אם המשתמש בחר לדלג על ההתחברות
 };
 
 let tokenClient;
@@ -1040,6 +1066,7 @@ const sidebarTree     = document.getElementById('sidebarTree');
 
 // Modals
 const loginOverlay    = document.getElementById('loginOverlay');
+const skipAuthBtn     = document.getElementById('skipAuthBtn');
 const aboutModal      = document.getElementById('aboutModal');
 const aboutBtn        = document.getElementById('aboutBtn');
 const closeAboutBtn   = document.getElementById('closeAboutBtn');
@@ -1056,9 +1083,15 @@ async function apiFetch(url) {
   const res = await fetch(url, { headers });
   
   if (!res.ok) {
-    if (res.status === 401 || res.status === 403) {
-       loginOverlay.classList.add('visible');
-       throw new Error('פג תוקף ההתחברות או שחסרה הרשאה. אנא התחבר מחדש.');
+    if (res.status === 401 || res.status === 403 || res.status === 404) {
+       // אם המשתמש לא בחר במפורש לדלג, נציג לו שוב את מסך ההתחברות
+       if (!state.skippedAuth && !state.accessToken) {
+           loginOverlay.classList.add('visible');
+           throw new Error('פג תוקף ההתחברות או שחסרה הרשאה. אנא התחבר מחדש.');
+       } else {
+           // אם המשתמש בחר לדלג והתיקייה חסומה, נציג שגיאה פשוטה באזור התוכן כדי לא לשגע אותו עם חלונות קופצים
+           throw new Error('אין הרשאת גישה לתיקייה זו, ייתכן שהיא מוגדרת כפרטית. רענן את העמוד כדי להתחבר לחשבון גוגל מורשה.');
+       }
     }
     const err = await res.json().catch(() => ({}));
     throw new Error(err.error?.message || 'שגיאת שרת ' + res.status);
@@ -1471,6 +1504,13 @@ function initApp() {
   loadFolder(currentFolder().id);
 }
 
+// טיפול בכפתור הדילוג
+skipAuthBtn.addEventListener('click', function() {
+  state.skippedAuth = true;
+  loginOverlay.classList.remove('visible');
+  initApp();
+});
+
 function init() {
   setupEmailLinks(); // הגדרת לינקים לשליחת מייל
   
@@ -1480,6 +1520,7 @@ function init() {
     callback: (tokenResponse) => {
       if (tokenResponse && tokenResponse.access_token) {
         state.accessToken = tokenResponse.access_token;
+        state.skippedAuth = false;
         initApp();
       }
     },
@@ -1490,7 +1531,7 @@ function init() {
   });
   
   // מסך ההתחברות פתוח כברירת מחדל אם אין עדיין טוקן
-  if (!state.accessToken) {
+  if (!state.accessToken && !state.skippedAuth) {
     loginOverlay.classList.add('visible');
   }
 }
