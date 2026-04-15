@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ארכיון מסמכים</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080b14;
+      --surface: #0e1220;
+      --surface2: #141929;
+      --surface3: #1c2235;
+      --border: #1e2640;
+      --border-light: #2a3356;
+      --accent: #4f8ef7;
+      --accent2: #7c5cfc;
+      --accent-hover: #6ba3ff;
+      --accent-glow: rgba(79,142,247,0.15);
+      --text: #e2e8f8;
+      --text-muted: #6b7a9e;
+      --text-dim: #3d4d6e;
+      --folder: #f7c948;
+      --folder-bg: rgba(247,201,72,0.1);
+      --success: #34d399;
+      --danger: #f87171;
+      --danger-bg: rgba(248,113,113,0.1);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.4);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Heebo', 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== BACKGROUND GLOW ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(79,142,247,0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: rgba(14,18,32,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .logo-icon {
+      width: 34px;
+      height: 34px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      box-shadow: 0 0 16px rgba(79,142,247,0.3);
+    }
+
+    .logo-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      letter-spacing: -0.3px;
+    }
+
+    .logo-text span { color: var(--accent); }
+
+    /* ===== SEARCH ===== */
+    .search-wrap {
+      flex: 1;
+      max-width: 560px;
+      position: relative;
+    }
+
+    .search-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    #searchInput {
+      width: 100%;
+      padding: 10px 44px 10px 44px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 0.92rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+    }
+
+    #searchInput::placeholder { color: var(--text-muted); }
+
+    #searchInput:focus {
+      border-color: var(--accent);
+      background: var(--surface3);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .search-icon-left {
+      position: absolute;
+      right: 14px;
+      color: var(--text-muted);
+      pointer-events: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    #searchInput:focus ~ .search-icon-left { color: var(--accent); }
+
+    .search-clear {
+      position: absolute;
+      left: 12px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 2px;
+      display: none;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+
+    .search-clear:hover { color: var(--text); }
+    .search-clear.visible { display: block; }
+
+    /* ===== HEADER ACTIONS ===== */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: auto;
+    }
+
+    .view-btn {
+      width: 36px;
+      height: 36px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .view-btn:hover { border-color: var(--border-light); color: var(--text); }
+
+    .view-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(79,142,247,0.3);
+    }
+
+    /* ===== BREADCRUMB ===== */
+    #breadcrumb {
+      padding: 10px 28px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      z-index: 10;
+    }
+
+    .crumb {
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: 6px;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .crumb:hover {
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .crumb-sep {
+      color: var(--text-dim);
+      font-size: 0.75rem;
+    }
+
+    .crumb-current {
+      color: var(--text);
+      font-weight: 500;
+      padding: 3px 8px;
+    }
+
+    /* ===== LAYOUT ===== */
+    .app-body {
+      display: flex;
+      min-height: calc(100vh - 64px - 41px);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== SIDEBAR ===== */
+    #sidebar {
+      width: 260px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      padding: 16px 0;
+      overflow-y: auto;
+      position: sticky;
+      top: 105px;
+      height: calc(100vh - 105px);
+      transition: width 0.3s;
+    }
+
+    .sidebar-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0 16px 10px;
+    }
+
+    .tree-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 16px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      transition: all 0.15s;
+      border-right: 2px solid transparent;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tree-item:hover {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .tree-item.active {
+      background: var(--accent-glow);
+      color: var(--accent);
+      border-right-color: var(--accent);
+      font-weight: 500;
+    }
+
+    .tree-item .tree-icon { flex-shrink: 0; font-size: 0.9rem; }
+    .tree-item .tree-name { overflow: hidden; text-overflow: ellipsis; }
+
+    /* ===== MAIN ===== */
+    main {
+      flex: 1;
+      padding: 24px 28px;
+      min-width: 0;
+    }
+
+    /* ===== TOOLBAR ===== */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .item-count {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .sort-select {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-family: inherit;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .sort-select:hover { border-color: var(--border-light); }
+
+    /* ===== SEARCH BANNER ===== */
+    .search-banner {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      margin-bottom: 20px;
+      animation: slideDown 0.2s ease;
+    }
+
+    .search-banner.visible { display: flex; }
+
+    .search-banner-text { font-size: 0.88rem; color: var(--text-muted); flex: 1; }
+    .search-banner-text strong { color: var(--accent); font-weight: 600; }
+
+    .search-banner-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+
+    .search-banner-close:hover { background: var(--surface3); color: var(--text); }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== ERROR ===== */
+    .error-box {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      background: var(--danger-bg);
+      border: 1px solid rgba(248,113,113,0.3);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      color: var(--danger);
+      font-size: 0.88rem;
+      margin-bottom: 20px;
+      animation: slideDown 0.2s ease;
+    }
+
+    .error-box.visible { display: flex; }
+
+    /* ===== FILE GRID ===== */
+    #fileContainer.grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    #fileContainer.list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* ===== GRID CARD ===== */
+    .file-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 14px 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s, background 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+      word-break: break-word;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.25s ease both;
+    }
+
+    .file-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent-glow), transparent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .file-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px var(--accent);
+    }
+
+    .file-card:hover::before { opacity: 1; }
+
+    .file-card.folder-card { border-color: rgba(247,201,72,0.2); }
+    .file-card.folder-card:hover { border-color: var(--folder); box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px var(--folder); }
+    .file-card.folder-card::before { background: linear-gradient(135deg, var(--folder-bg), transparent); }
+
+    .file-card .icon-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.7rem;
+      background: var(--surface2);
+      position: relative;
+      z-index: 1;
+    }
+
+    .file-card.folder-card .icon-wrap { background: var(--folder-bg); }
+
+    .file-card .name {
+      font-size: 0.8rem;
+      color: var(--text);
+      line-height: 1.45;
+      max-height: 2.9em;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .file-card .meta {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== LIST CARD ===== */
+    #fileContainer.list .file-card {
+      flex-direction: row;
+      text-align: right;
+      padding: 11px 16px;
+      gap: 14px;
+      align-items: center;
+      border-radius: var(--radius-sm);
+    }
+
+    #fileContainer.list .file-card:hover { transform: translateX(-2px); }
+
+    #fileContainer.list .file-card .icon-wrap {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    #fileContainer.list .file-card .name {
+      flex: 1;
+      font-size: 0.88rem;
+      max-height: none;
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #fileContainer.list .file-card .meta { white-space: nowrap; flex-shrink: 0; }
+
+    /* ===== SKELETON ===== */
+    .skeleton {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .skeleton::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+      animation: shimmer 1.4s infinite;
+    }
+
+    @keyframes shimmer {
+      from { transform: translateX(100%); }
+      to   { transform: translateX(-100%); }
+    }
+
+    .skeleton-grid { height: 140px; }
+    .skeleton-list { height: 56px; border-radius: var(--radius-sm); }
+
+    /* ===== STATES ===== */
+    .state-box {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-muted);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .state-icon {
+      font-size: 3.5rem;
+      margin-bottom: 16px;
+      display: block;
+      filter: grayscale(0.3);
+    }
+
+    .state-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .state-sub { font-size: 0.88rem; line-height: 1.6; }
+
+    /* ===== LOAD MORE ===== */
+    #loadMoreBtn {
+      display: none;
+      margin: 28px auto 0;
+      padding: 12px 36px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-family: inherit;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #loadMoreBtn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .file-card:nth-child(1)  { animation-delay: 0.02s; }
+    .file-card:nth-child(2)  { animation-delay: 0.04s; }
+    .file-card:nth-child(3)  { animation-delay: 0.06s; }
+    .file-card:nth-child(4)  { animation-delay: 0.08s; }
+    .file-card:nth-child(5)  { animation-delay: 0.10s; }
+    .file-card:nth-child(6)  { animation-delay: 0.12s; }
+    .file-card:nth-child(7)  { animation-delay: 0.14s; }
+    .file-card:nth-child(8)  { animation-delay: 0.16s; }
+
+    /* ===== TOOLTIP ===== */
+    [data-tip] { position: relative; }
+    [data-tip]:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--surface3);
+      border: 1px solid var(--border-light);
+      color: var(--text);
+      font-size: 0.75rem;
+      padding: 5px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 999;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      #sidebar { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 0 16px; gap: 12px; }
+      .logo-text { display: none; }
+      main { padding: 16px; }
+      #breadcrumb { padding: 8px 16px; }
+      #fileContainer.grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#">
+    <div class="logo-icon">📁</div>
+    <span class="logo-text">ארכיון <span>מסמכים</span></span>
+  </a>
+
+  <div class="search-wrap">
+    <div class="search-inner">
+      <input type="text" id="searchInput" placeholder="חיפוש בכל הקבצים..." autocomplete="off" spellcheck="false" />
+      <span class="search-icon-left">🔍</span>
+      <button class="search-clear" id="searchClear" title="נקה חיפוש">✕</button>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <button class="view-btn active" id="gridBtn" data-tip="תצוגת רשת" aria-label="תצוגת רשת">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+    </button>
+    <button class="view-btn" id="listBtn" data-tip="תצוגת רשימה" aria-label="תצוגת רשימה">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="2" width="14" height="2" rx="1"/><rect x="1" y="7" width="14" height="2" rx="1"/><rect x="1" y="12" width="14" height="2" rx="1"/></svg>
+    </button>
+  </div>
+</header>
+
+<div id="breadcrumb">
+  <span class="crumb">🏠</span>
+  <span class="crumb-sep">›</span>
+  <span class="crumb-current">בית</span>
+</div>
+
+<div class="app-body">
+  <aside id="sidebar">
+    <div class="sidebar-title">תיקיות אחרונות</div>
+    <div id="sidebarTree"></div>
+  </aside>
+
+  <main>
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="item-count" id="itemCount" style="display:none"></div>
+        <select class="sort-select" id="sortSelect">
+          <option value="folder,name">מיון: שם</option>
+          <option value="modifiedTime desc">מיון: תאריך</option>
+          <option value="name desc">מיון: שם הפוך</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="search-banner" id="searchBanner">
+      <span>🔍</span>
+      <span class="search-banner-text">תוצאות עבור: <strong id="searchTerm"></strong></span>
+      <button class="search-banner-close" id="searchBannerClose">✕</button>
+    </div>
+
+    <div class="error-box" id="errorBox">
+      <span>⚠️</span>
+      <span id="errorMsg"></span>
+    </div>
+
+    <div id="fileContainer" class="grid"></div>
+    <button id="loadMoreBtn">טען עוד קבצים</button>
+  </main>
+</div>
+
+<script>
+// ============================================================
+//  CONFIG — החלף את הערכים האלה
+// ============================================================
+const CONFIG = {
+  API_KEY:   'YOUR_GOOGLE_API_KEY',   // ← הכנס את ה-API Key שלך
+  ROOT_ID:   'YOUR_ROOT_FOLDER_ID',   // ← הכנס את ה-Folder ID של התיקייה הראשית
+  PAGE_SIZE: 100,
+};
+// ============================================================
+
+const MIME_FOLDER = 'application/vnd.google-apps.folder';
+
+const FILE_TYPES = {
+  'application/vnd.google-apps.folder':        { icon: '📁', color: '#f7c948' },
+  'application/vnd.google-apps.document':      { icon: '📝', color: '#4285f4' },
+  'application/vnd.google-apps.spreadsheet':   { icon: '📊', color: '#34a853' },
+  'application/vnd.google-apps.presentation':  { icon: '📽️', color: '#fbbc04' },
+  'application/vnd.google-apps.form':          { icon: '📋', color: '#7c5cfc' },
+  'application/pdf':                           { icon: '📄', color: '#ea4335' },
+  'image/jpeg':                                { icon: '🖼️', color: '#4f8ef7' },
+  'image/png':                                 { icon: '🖼️', color: '#4f8ef7' },
+  'image/gif':                                 { icon: '🖼️', color: '#4f8ef7' },
+  'image/webp':                                { icon: '🖼️', color: '#4f8ef7' },
+  'video/mp4':                                 { icon: '🎬', color: '#ff6b6b' },
+  'audio/mpeg':                                { icon: '🎵', color: '#a78bfa' },
+  'application/zip':                           { icon: '🗜️', color: '#94a3b8' },
+  'text/plain':                                { icon: '📃', color: '#94a3b8' },
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document':   { icon: '📝', color: '#4285f4' },
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':         { icon: '📊', color: '#34a853' },
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation': { icon: '📽️', color: '#fbbc04' },
+};
+
+function getFileType(mimeType) {
+  return FILE_TYPES[mimeType] || { icon: '📎', color: '#6b7a9e' };
+}
+
+function formatSize(bytes) {
+  if (!bytes) return '';
+  const b = +bytes;
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+  if (b < 1073741824) return (b / 1048576).toFixed(1) + ' MB';
+  return (b / 1073741824).toFixed(1) + ' GB';
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const now = new Date();
+  const diff = now - d;
+  if (diff < 86400000) return 'היום';
+  if (diff < 172800000) return 'אתמול';
+  if (diff < 604800000) return 'לפני ' + Math.floor(diff / 86400000) + ' ימים';
+  return d.toLocaleDateString('he-IL', { day: 'numeric', month: 'short', year: d.getFullYear() !== now.getFullYear() ? 'numeric' : undefined });
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ============================================================
+//  STATE
+// ============================================================
+let state = {
+  stack: [{ id: CONFIG.ROOT_ID, name: 'בית' }],
+  nextPageToken: null,
+  currentQuery: '',
+  isSearchMode: false,
+  loading: false,
+  view: 'grid',
+  sort: 'folder,name',
+  recentFolders: [],
+};
+
+// ============================================================
+//  DOM REFS
+// ============================================================
+const fileContainer   = document.getElementById('fileContainer');
+const loadMoreBtn     = document.getElementById('loadMoreBtn');
+const breadcrumbEl    = document.getElementById('breadcrumb');
+const itemCountEl     = document.getElementById('itemCount');
+const searchInput     = document.getElementById('searchInput');
+const searchClear     = document.getElementById('searchClear');
+const searchBanner    = document.getElementById('searchBanner');
+const searchTermEl    = document.getElementById('searchTerm');
+const searchBannerClose = document.getElementById('searchBannerClose');
+const errorBox        = document.getElementById('errorBox');
+const errorMsgEl      = document.getElementById('errorMsg');
+const gridBtn         = document.getElementById('gridBtn');
+const listBtn         = document.getElementById('listBtn');
+const sortSelect      = document.getElementById('sortSelect');
+const sidebarTree     = document.getElementById('sidebarTree');
+
+// ============================================================
+//  API
+// ============================================================
+async function apiFetch(url) {
+  const res = await fetch(url);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'שגיאת שרת ' + res.status);
+  }
+  return res.json();
+}
+
+async function fetchFiles(folderId, pageToken = null) {
+  const q = encodeURIComponent("'" + folderId + "' in parents and trashed = false");
+  const fields = encodeURIComponent('nextPageToken,files(id,name,mimeType,size,modifiedTime,webViewLink)');
+  let url = 'https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=' + fields + '&pageSize=' + CONFIG.PAGE_SIZE + '&orderBy=' + encodeURIComponent(state.sort) + '&key=' + CONFIG.API_KEY;
+  if (pageToken) url += '&pageToken=' + encodeURIComponent(pageToken);
+  return apiFetch(url);
+}
+
+async function searchFiles(query, pageToken = null) {
+  const safe = query.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  const q = encodeURIComponent("name contains '" + safe + "' and trashed = false");
+  const fields = encodeURIComponent('nextPageToken,files(id,name,mimeType,size,modifiedTime,webViewLink)');
+  let url = 'https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=' + fields + '&pageSize=' + CONFIG.PAGE_SIZE + '&key=' + CONFIG.API_KEY;
+  if (pageToken) url += '&pageToken=' + encodeURIComponent(pageToken);
+  return apiFetch(url);
+}
+
+// ============================================================
+//  SKELETON
+// ============================================================
+function showSkeleton() {
+  const count = state.view === 'grid' ? 12 : 8;
+  const cls = state.view === 'grid' ? 'skeleton-grid' : 'skeleton-list';
+  fileContainer.innerHTML = Array(count).fill(0).map(() => '<div class="skeleton ' + cls + '"></div>').join('');
+  loadMoreBtn.style.display = 'none';
+}
+
+// ============================================================
+//  RENDER
+// ============================================================
+function renderItems(items, append) {
+  if (!append) fileContainer.innerHTML = '';
+
+  if (items.length === 0 && !append) {
+    const msg = state.isSearchMode
+      ? '<span class="state-icon">🔍</span><div class="state-title">לא נמצאו תוצאות</div><div class="state-sub">נסה מילות חיפוש אחרות</div>'
+      : '<span class="state-icon">🗂️</span><div class="state-title">התיקייה ריקה</div><div class="state-sub">אין קבצים בתיקייה זו</div>';
+    fileContainer.innerHTML = '<div class="state-box">' + msg + '</div>';
+    return;
+  }
+
+  const frag = document.createDocumentFragment();
+  items.forEach(function(item) {
+    const ft = getFileType(item.mimeType);
+    const isFolder = item.mimeType === MIME_FOLDER;
+    const card = document.createElement('div');
+    card.className = 'file-card' + (isFolder ? ' folder-card' : '');
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    const meta = [formatDate(item.modifiedTime), formatSize(item.size)].filter(Boolean).join(' · ');
+    card.innerHTML =
+      '<div class="icon-wrap" style="color:' + ft.color + '">' + ft.icon + '</div>' +
+      '<div class="name" title="' + escapeHtml(item.name) + '">' + escapeHtml(item.name) + '</div>' +
+      (meta ? '<div class="meta">' + meta + '</div>' : '');
+
+    const action = isFolder
+      ? function() { openFolder(item.id, item.name); }
+      : function() { if (item.webViewLink) window.open(item.webViewLink, '_blank'); };
+
+    card.addEventListener('click', action);
+    card.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') action(); });
+    frag.appendChild(card);
+  });
+  fileContainer.appendChild(frag);
+  updateCount();
+}
+
+function updateCount() {
+  const n = fileContainer.querySelectorAll('.file-card').length;
+  if (n > 0) {
+    itemCountEl.textContent = n.toLocaleString('he-IL') + ' פריטים' + (state.nextPageToken ? '+' : '');
+    itemCountEl.style.display = 'inline-block';
+  } else {
+    itemCountEl.style.display = 'none';
+  }
+}
+
+function showError(msg) {
+  errorMsgEl.textContent = msg;
+  errorBox.classList.add('visible');
+}
+
+function hideError() {
+  errorBox.classList.remove('visible');
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ============================================================
+//  NAVIGATION
+// ============================================================
+function currentFolder() {
+  return state.stack[state.stack.length - 1];
+}
+
+function addRecentFolder(id, name) {
+  state.recentFolders = state.recentFolders.filter(function(f) { return f.id !== id; });
+  state.recentFolders.unshift({ id: id, name: name });
+  if (state.recentFolders.length > 10) state.recentFolders.pop();
+  renderSidebar();
+}
+
+function renderSidebar() {
+  sidebarTree.innerHTML = '';
+  state.recentFolders.forEach(function(f) {
+    const el = document.createElement('div');
+    el.className = 'tree-item' + (currentFolder().id === f.id ? ' active' : '');
+    el.innerHTML = '<span class="tree-icon">📁</span><span class="tree-name">' + escapeHtml(f.name) + '</span>';
+    el.addEventListener('click', function() {
+      const idx = state.stack.findIndex(function(s) { return s.id === f.id; });
+      if (idx >= 0) navigateTo(idx);
+      else openFolder(f.id, f.name);
+    });
+    sidebarTree.appendChild(el);
+  });
+}
+
+async function openFolder(id, name) {
+  state.stack.push({ id: id, name: name });
+  state.isSearchMode = false;
+  state.currentQuery = '';
+  searchInput.value = '';
+  searchClear.classList.remove('visible');
+  searchBanner.classList.remove('visible');
+  addRecentFolder(id, name);
+  renderBreadcrumb();
+  await loadFolder(id);
+}
+
+async function loadFolder(folderId, append) {
+  if (state.loading) return;
+  state.loading = true;
+  hideError();
+  if (!append) showSkeleton();
+  try {
+    const data = await fetchFiles(folderId, append ? state.nextPageToken : null);
+    state.nextPageToken = data.nextPageToken || null;
+    renderItems(data.files || [], append);
+    loadMoreBtn.style.display = state.nextPageToken ? 'block' : 'none';
+  } catch(e) {
+    showError(e.message);
+    if (!append) fileContainer.innerHTML = '';
+  } finally {
+    state.loading = false;
+  }
+}
+
+async function doSearch(query, append) {
+  if (!query.trim() || state.loading) return;
+  state.loading = true;
+  state.isSearchMode = true;
+  state.currentQuery = query;
+  hideError();
+  if (!append) showSkeleton();
+  searchTermEl.textContent = '"' + query + '"';
+  searchBanner.classList.add('visible');
+  try {
+    const data = await searchFiles(query, append ? state.nextPageToken : null);
+    state.nextPageToken = data.nextPageToken || null;
+    renderItems(data.files || [], append);
+    loadMoreBtn.style.display = state.nextPageToken ? 'block' : 'none';
+  } catch(e) {
+    showError(e.message);
+    if (!append) fileContainer.innerHTML = '';
+  } finally {
+    state.loading = false;
+  }
+}
+
+// ============================================================
+//  BREADCRUMB
+// ============================================================
+function renderBreadcrumb() {
+  breadcrumbEl.innerHTML = '';
+  state.stack.forEach(function(item, i) {
+    const isLast = i === state.stack.length - 1;
+    if (i > 0) {
+      const sep = document.createElement('span');
+      sep.className = 'crumb-sep';
+      sep.textContent = '›';
+      breadcrumbEl.appendChild(sep);
+    }
+    const el = document.createElement('span');
+    if (isLast) {
+      el.className = 'crumb-current';
+      el.textContent = i === 0 ? '🏠 בית' : item.name;
+    } else {
+      el.className = 'crumb';
+      el.textContent = i === 0 ? '🏠' : item.name;
+      el.title = item.name;
+      (function(idx) { el.addEventListener('click', function() { navigateTo(idx); }); })(i);
+    }
+    breadcrumbEl.appendChild(el);
+  });
+}
+
+async function navigateTo(index) {
+  state.stack = state.stack.slice(0, index + 1);
+  state.isSearchMode = false;
+  state.currentQuery = '';
+  searchInput.value = '';
+  searchClear.classList.remove('visible');
+  searchBanner.classList.remove('visible');
+  renderBreadcrumb();
+  await loadFolder(currentFolder().id);
+}
+
+// ============================================================
+//  EVENTS
+// ============================================================
+var searchTimer = null;
+
+searchInput.addEventListener('input', function() {
+  var val = searchInput.value;
+  searchClear.classList.toggle('visible', val.length > 0);
+  clearTimeout(searchTimer);
+  if (val.trim().length >= 2) {
+    searchTimer = setTimeout(function() { doSearch(val.trim()); }, 500);
+  } else if (val.trim().length === 0) {
+    searchBanner.classList.remove('visible');
+    state.isSearchMode = false;
+    loadFolder(currentFolder().id);
+  }
+});
+
+searchInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    clearTimeout(searchTimer);
+    var q = searchInput.value.trim();
+    if (q) doSearch(q);
+  }
+  if (e.key === 'Escape') {
+    searchInput.value = '';
+    searchClear.classList.remove('visible');
+    searchBanner.classList.remove('visible');
+    state.isSearchMode = false;
+    clearTimeout(searchTimer);
+    loadFolder(currentFolder().id);
+  }
+});
+
+searchClear.addEventListener('click', function() {
+  searchInput.value = '';
+  searchClear.classList.remove('visible');
+  searchBanner.classList.remove('visible');
+  state.isSearchMode = false;
+  clearTimeout(searchTimer);
+  loadFolder(currentFolder().id);
+  searchInput.focus();
+});
+
+searchBannerClose.addEventListener('click', function() {
+  searchInput.value = '';
+  searchClear.classList.remove('visible');
+  searchBanner.classList.remove('visible');
+  state.isSearchMode = false;
+  loadFolder(currentFolder().id);
+});
+
+loadMoreBtn.addEventListener('click', function() {
+  if (state.isSearchMode) doSearch(state.currentQuery, true);
+  else loadFolder(currentFolder().id, true);
+});
+
+gridBtn.addEventListener('click', function() {
+  state.view = 'grid';
+  fileContainer.className = 'grid';
+  gridBtn.classList.add('active');
+  listBtn.classList.remove('active');
+});
+
+listBtn.addEventListener('click', function() {
+  state.view = 'list';
+  fileContainer.className = 'list';
+  listBtn.classList.add('active');
+  gridBtn.classList.remove('active');
+});
+
+sortSelect.addEventListener('change', function() {
+  state.sort = sortSelect.value;
+  if (!state.isSearchMode) loadFolder(currentFolder().id);
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === '/' && document.activeElement !== searchInput) {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  }
+});
+
+// ============================================================
+//  INIT
+// ============================================================
+function init() {
+  if (CONFIG.API_KEY === 'YOUR_GOOGLE_API_KEY' || CONFIG.ROOT_ID === 'YOUR_ROOT_FOLDER_ID') {
+    fileContainer.innerHTML =
+      '<div class="state-box">' +
+        '<span class="state-icon">⚙️</span>' +
+        '<div class="state-title" style="color:#f7c948">נדרשת הגדרה</div>' +
+        '<div class="state-sub">' +
+          'פתח את <code style="background:var(--surface3);padding:2px 6px;border-radius:4px">index.html</code> והחלף:<br><br>' +
+          '<code style="background:var(--surface3);padding:2px 6px;border-radius:4px">YOUR_GOOGLE_API_KEY</code> — ה-API Key שלך<br><br>' +
+          '<code style="background:var(--surface3);padding:2px 6px;border-radius:4px">YOUR_ROOT_FOLDER_ID</code> — ה-ID של התיקייה הראשית' +
+        '</div>' +
+      '</div>';
+    return;
+  }
+  renderBreadcrumb();
+  loadFolder(CONFIG.ROOT_ID);
+}
+
+init();
+</script>
+</body>
+</html>
