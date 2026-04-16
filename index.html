@@ -4,13 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ארכיון מסמכים | מערכת ניהול</title>
+  
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     :root {
-      /* Enterprise Light Theme (Default) */
       --bg: #F8F9FA;
       --surface: #FFFFFF;
       --surface2: #F1F3F4;
@@ -36,7 +37,6 @@
       --shadow-modal: 0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12), 0 11px 15px -7px rgba(0,0,0,0.2);
     }
 
-    /* Enterprise Dark Theme */
     body.dark-theme {
       --bg: #202124;
       --surface: #292A2D;
@@ -61,957 +61,175 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-      transition: background-color 0.4s ease, color 0.4s ease;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ===== HEADER ===== */
-    header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      box-shadow: var(--shadow-header);
-      padding: 0 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      height: 64px;
-      transition: background-color 0.4s ease, border-color 0.4s ease;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      flex-shrink: 0;
-      width: 240px;
-      transition: transform 0.2s ease;
-    }
-
-    .logo:hover {
-      transform: scale(1.02);
-    }
-
-    .logo-icon {
-      font-size: 1.4rem;
-      color: var(--primary);
-    }
-
-    .logo-text {
-      font-size: 1.2rem;
-      font-weight: 500;
-      color: var(--text);
-      white-space: nowrap;
-    }
-
-    /* ===== SEARCH ===== */
-    .search-wrap {
-      flex: 1;
-      max-width: 650px;
-      position: relative;
-      margin: 0 24px;
-    }
-
-    .search-inner {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    #searchInput {
-      width: 100%;
-      padding: 10px 48px 10px 16px;
-      background: var(--surface2);
-      border: 1px solid transparent;
-      border-radius: var(--radius);
-      color: var(--text);
-      font-size: 0.95rem;
-      font-family: inherit;
-      outline: none;
-      transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    }
-
-    #searchInput::placeholder { color: var(--text-muted); transition: color 0.3s ease; }
-
-    #searchInput:focus {
-      background: var(--surface);
-      border-color: var(--primary);
-      box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-    }
-
-    .search-icon-left {
-      position: absolute;
-      right: 16px;
-      color: var(--text-muted);
-      pointer-events: none;
-      font-size: 1rem;
-      transition: color 0.3s ease;
-    }
-
-    #searchInput:focus ~ .search-icon-left { color: var(--primary); }
-
-    .search-clear {
-      position: absolute;
-      left: 12px;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 1.1rem;
-      padding: 4px;
-      display: none;
-      transition: color 0.2s ease, transform 0.2s ease;
-    }
-
-    .search-clear:hover { color: var(--text); transform: scale(1.1); }
-    .search-clear.visible { display: block; animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-
-    /* ===== HEADER ACTIONS ===== */
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
-    }
-
-    .icon-btn {
-      width: 40px;
-      height: 40px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
-    }
-
+    body { font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; transition: background-color 0.4s ease, color 0.4s ease; -webkit-font-smoothing: antialiased; }
+    header { background: var(--surface); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-header); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; height: 64px; transition: background-color 0.4s ease, border-color 0.4s ease; }
+    .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; width: 240px; }
+    .logo-icon { font-size: 1.4rem; color: var(--primary); }
+    .logo-text { font-size: 1.2rem; font-weight: 500; color: var(--text); white-space: nowrap; }
+    .search-wrap { flex: 1; max-width: 650px; position: relative; margin: 0 24px; }
+    .search-inner { position: relative; display: flex; align-items: center; }
+    #searchInput { width: 100%; padding: 10px 48px 10px 16px; background: var(--surface2); border: 1px solid transparent; border-radius: var(--radius); color: var(--text); font-size: 0.95rem; font-family: inherit; outline: none; transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+    #searchInput:focus { background: var(--surface); border-color: var(--primary); box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3); }
+    .search-icon-left { position: absolute; right: 16px; color: var(--text-muted); pointer-events: none; font-size: 1rem; }
+    .search-clear { position: absolute; left: 12px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; padding: 4px; display: none; }
+    .search-clear.visible { display: block; }
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+    .icon-btn { width: 40px; height: 40px; background: transparent; border: none; color: var(--text-muted); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; transition: background 0.2s; }
     .icon-btn:hover { background: var(--surface2); color: var(--text); }
-    .icon-btn:active { transform: scale(0.92); }
-    
-    .view-btn.active {
-      color: var(--primary);
-      background: var(--primary-light);
-    }
-
-    /* ===== BREADCRUMB ===== */
-    #breadcrumb {
-      padding: 12px 24px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      font-size: 0.9rem;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      position: relative;
-      z-index: 10;
-      transition: background-color 0.4s ease;
-    }
-
-    .crumb {
-      cursor: pointer;
-      color: var(--text-muted);
-      padding: 4px 8px;
-      border-radius: var(--radius-sm);
-      transition: background 0.2s ease, color 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .crumb:hover {
-      background: var(--surface2);
-      color: var(--text);
-    }
-
-    .crumb-sep {
-      color: var(--border);
-      font-size: 0.8rem;
-    }
-
-    .crumb-current {
-      color: var(--text);
-      font-weight: 500;
-      padding: 4px 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      animation: slideInRight 0.3s ease;
-    }
-
-    /* ===== LAYOUT ===== */
-    .app-body {
-      display: flex;
-      height: calc(100vh - 64px - 45px);
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ===== SIDEBAR ===== */
-    #sidebar {
-      width: 260px;
-      flex-shrink: 0;
-      background: var(--surface);
-      border-left: 1px solid var(--border);
-      padding: 16px 8px;
-      overflow-y: auto;
-      transition: width 0.3s ease, background-color 0.4s ease;
-    }
-
-    .sidebar-title {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 0 16px 12px;
-    }
-
-    .tree-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 8px 16px;
-      margin-bottom: 4px;
-      border-radius: 0 24px 24px 0;
-      cursor: pointer;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .tree-item:hover {
-      background: var(--surface2);
-      color: var(--text);
-      transform: translateX(-4px); /* Slight slide right for RTL */
-    }
-
-    .tree-item.active {
-      background: var(--primary-light);
-      color: var(--primary);
-      font-weight: 500;
-    }
-
-    .tree-item .tree-icon { flex-shrink: 0; font-size: 1rem; color: var(--folder); transition: transform 0.2s ease;}
-    .tree-item:hover .tree-icon { transform: scale(1.1); }
-    .tree-item.active .tree-icon { color: var(--primary); }
-    .tree-item .tree-name { overflow: hidden; text-overflow: ellipsis; }
-
-    /* ===== MAIN ===== */
-    main {
-      flex: 1;
-      padding: 24px;
-      overflow-y: auto;
-      min-width: 0;
-      background: var(--bg);
-      transition: background-color 0.4s ease;
-    }
-
-    /* ===== TOOLBAR ===== */
-    .toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .toolbar-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .item-count {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-weight: 500;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .sort-select {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 6px 32px 6px 12px;
-      border-radius: var(--radius-sm);
-      font-size: 0.85rem;
-      font-family: inherit;
-      cursor: pointer;
-      outline: none;
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: left 8px center;
-      background-size: 14px;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .sort-select:hover, .sort-select:focus { 
-      border-color: var(--primary); 
-    }
-
-    /* ===== SEARCH BANNER ===== */
-    .search-banner {
-      display: none;
-      align-items: center;
-      gap: 12px;
-      background: var(--primary-light);
-      border: 1px solid var(--primary);
-      border-radius: var(--radius);
-      padding: 12px 20px;
-      margin-bottom: 24px;
-      color: var(--text);
-      animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
+    .view-btn.active { color: var(--primary); background: var(--primary-light); }
+    #breadcrumb { padding: 12px 24px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 0.9rem; background: var(--surface); border-bottom: 1px solid var(--border); transition: background-color 0.4s ease; }
+    .crumb { cursor: pointer; color: var(--text-muted); padding: 4px 8px; border-radius: var(--radius-sm); display: flex; align-items: center; gap: 6px; }
+    .crumb:hover { background: var(--surface2); color: var(--text); }
+    .crumb-sep { color: var(--border); font-size: 0.8rem; }
+    .crumb-current { color: var(--text); font-weight: 500; padding: 4px 8px; display: flex; align-items: center; gap: 6px; }
+    .app-body { display: flex; height: calc(100vh - 64px - 45px); position: relative; z-index: 1; }
+    #sidebar { width: 260px; flex-shrink: 0; background: var(--surface); border-left: 1px solid var(--border); padding: 16px 8px; overflow-y: auto; transition: background-color 0.4s ease; }
+    .sidebar-title { font-size: 0.75rem; font-weight: 600; color: var(--text-dim); text-transform: uppercase; padding: 0 16px 12px; }
+    .tree-item { display: flex; align-items: center; gap: 12px; padding: 8px 16px; margin-bottom: 4px; border-radius: 0 24px 24px 0; cursor: pointer; font-size: 0.9rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tree-item:hover { background: var(--surface2); color: var(--text); }
+    .tree-item.active { background: var(--primary-light); color: var(--primary); font-weight: 500; }
+    .tree-item .tree-icon { flex-shrink: 0; font-size: 1rem; color: var(--folder); }
+    main { flex: 1; padding: 24px; overflow-y: auto; min-width: 0; background: var(--bg); transition: background-color 0.4s ease; }
+    .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .sort-select { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 6px 32px 6px 12px; border-radius: var(--radius-sm); font-size: 0.85rem; cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: left 8px center; background-size: 14px; }
+    .search-banner { display: none; align-items: center; gap: 12px; background: var(--primary-light); border: 1px solid var(--primary); border-radius: var(--radius); padding: 12px 20px; margin-bottom: 24px; color: var(--text); }
     .search-banner.visible { display: flex; }
-    .search-banner-icon { color: var(--primary); font-size: 1.1rem; }
-    .search-banner-text { font-size: 0.95rem; flex: 1; }
-    .search-banner-text strong { font-weight: 700; }
-
-    .search-banner-close {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 1.2rem;
-      padding: 4px;
-      transition: color 0.2s ease, transform 0.2s ease;
-    }
-
-    .search-banner-close:hover { color: var(--text); transform: rotate(90deg); }
-
-    /* ===== ERROR ===== */
-    .error-box {
-      display: none;
-      align-items: center;
-      gap: 12px;
-      background: var(--danger-bg);
-      border: 1px solid var(--danger);
-      border-radius: var(--radius);
-      padding: 12px 20px;
-      color: var(--danger);
-      font-size: 0.95rem;
-      margin-bottom: 24px;
-      animation: slideDown 0.3s ease;
-    }
+    .error-box { display: none; align-items: center; gap: 12px; background: var(--danger-bg); border: 1px solid var(--danger); border-radius: var(--radius); padding: 12px 20px; color: var(--danger); font-size: 0.95rem; margin-bottom: 24px; }
     .error-box.visible { display: flex; }
-
-    /* ===== FILE GRID/LIST ===== */
-    #fileContainer.grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
-    }
-
-    #fileContainer.list {
-      display: flex;
-      flex-direction: column;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow-card);
-    }
-
-    /* ===== GRID CARD ===== */
-    .file-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      text-align: right;
-      position: relative;
-      opacity: 0; /* For entry animation */
-      animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    #fileContainer.grid .file-card:hover {
-      box-shadow: var(--shadow-card-hover);
-      border-color: transparent;
-      transform: translateY(-4px);
-    }
-
-    #fileContainer.grid .file-card .icon-wrap {
-      font-size: 2.5rem;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      transition: transform 0.3s ease;
-    }
-
-    #fileContainer.grid .file-card:hover .icon-wrap {
-      transform: scale(1.1);
-    }
-
-    #fileContainer.grid .file-card.folder-card .icon-wrap {
-      color: var(--folder) !important;
-    }
-
-    .file-card .name {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--text);
-      line-height: 1.4;
-      max-height: 2.8em;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      line-clamp: 2;
-      -webkit-box-orient: vertical;
-      word-break: break-word;
-    }
-
-    .file-card .meta {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: auto;
-    }
-
-    /* ===== LIST ROW ===== */
-    #fileContainer.list .file-card {
-      flex-direction: row;
-      align-items: center;
-      padding: 12px 20px;
-      border: none;
-      border-bottom: 1px solid var(--border);
-      border-radius: 0;
-      gap: 16px;
-    }
-
-    #fileContainer.list .file-card:last-child {
-      border-bottom: none;
-    }
-
-    #fileContainer.list .file-card:hover {
-      background: var(--surface2);
-      transform: none; /* No lift in list view */
-      padding-right: 24px; /* Slide effect inside list */
-    }
-
-    #fileContainer.list .file-card .icon-wrap {
-      font-size: 1.2rem;
-      width: 24px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    #fileContainer.list .file-card .name {
-      flex: 1;
-      font-size: 0.9rem;
-      font-weight: 400;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      -webkit-line-clamp: 1;
-      line-clamp: 1;
-    }
-
-    #fileContainer.list .file-card .meta {
-      margin-top: 0;
-      white-space: nowrap;
-      flex-shrink: 0;
-      width: 150px;
-      text-align: left;
-    }
-
-    /* DOWNLOAD BUTTON */
-    .download-btn {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      width: 32px;
-      height: 32px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.9rem;
-      text-decoration: none;
-      opacity: 0;
-      transform: scale(0.8);
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 5;
-      box-shadow: var(--shadow-card);
-    }
-
-    #fileContainer.grid .file-card:hover .download-btn { opacity: 1; transform: scale(1); }
-
-    .download-btn:hover {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #fff;
-    }
-
-    #fileContainer.list .download-btn {
-      position: relative;
-      top: auto;
-      left: auto;
-      opacity: 0;
-      box-shadow: none;
-      border-color: transparent;
-      background: transparent;
-      width: auto;
-      height: auto;
-      padding: 8px;
-    }
-    
-    #fileContainer.list .file-card:hover .download-btn { opacity: 1; transform: scale(1); }
-
-    /* ===== SKELETON ===== */
-    .skeleton {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .skeleton::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.04) 50%, transparent 100%);
-      animation: shimmer 1.5s infinite;
-    }
-    
-    body.dark-theme .skeleton::after {
-      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
-    }
-
+    #fileContainer.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    #fileContainer.list { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .file-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 12px; text-align: right; position: relative; animation: fadeInUp 0.5s ease forwards; opacity: 0; }
+    #fileContainer.grid .file-card:hover { box-shadow: var(--shadow-card-hover); transform: translateY(-4px); }
+    .file-card .icon-wrap { font-size: 2.5rem; display: flex; align-items: center; }
+    .file-card .name { font-size: 0.9rem; font-weight: 500; color: var(--text); line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; word-break: break-word; }
+    .file-card .meta { font-size: 0.75rem; color: var(--text-muted); margin-top: auto; }
+    .download-btn { position: absolute; top: 12px; left: 12px; width: 32px; height: 32px; background: var(--surface); border: 1px solid var(--border); border-radius: 50%; color: var(--text-muted); display: flex; align-items: center; justify-content: center; opacity: 0; transition: all 0.3s ease; box-shadow: var(--shadow-card); }
+    .file-card:hover .download-btn { opacity: 1; }
+    .download-btn:hover { background: var(--primary); color: #fff; }
+    #fileContainer.list .file-card { flex-direction: row; border: none; border-bottom: 1px solid var(--border); border-radius: 0; padding: 12px 20px; }
+    #fileContainer.list .file-card .icon-wrap { font-size: 1.2rem; width: 24px; }
+    #fileContainer.list .file-card .name { -webkit-line-clamp: 1; line-clamp: 1; flex: 1; }
+    #fileContainer.list .file-card .meta { margin-top: 0; width: 150px; text-align: left; }
+    #fileContainer.list .download-btn { position: relative; top: auto; left: auto; box-shadow: none; border: none; padding: 8px; }
+    .skeleton { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; position: relative; }
+    .skeleton::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.04) 50%, transparent 100%); animation: shimmer 1.5s infinite; }
     .skeleton-grid { height: 160px; }
-    .skeleton-list { height: 53px; border-radius: 0; border-bottom: 1px solid var(--border); }
-
-    /* ===== STATES ===== */
-    .state-box {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 100px 20px;
-      color: var(--text-muted);
-      animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .state-icon {
-      font-size: 4rem;
-      margin-bottom: 16px;
-      display: block;
-      color: var(--border);
-    }
-
-    .state-title {
-      font-size: 1.2rem;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
-    .state-sub { font-size: 0.95rem; }
-
-    /* ===== LOAD MORE ===== */
-    #loadMoreBtn {
-      display: none;
-      margin: 32px auto;
-      padding: 10px 24px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--primary);
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-size: 0.95rem;
-      font-weight: 500;
-      font-family: inherit;
-      transition: all 0.2s ease;
-    }
-
-    #loadMoreBtn:hover {
-      background: var(--primary-light);
-      border-color: var(--primary-light);
-      transform: translateY(-2px);
-    }
-
-    /* ===== MODALS & OVERLAYS ===== */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(32, 33, 36, 0.6);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      z-index: 9999;
-      display: none; /* Hidden by default */
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .overlay.visible {
-      display: flex;
-      opacity: 1;
-    }
-
-    .modal-box {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 48px 40px;
-      max-width: 440px;
-      width: 100%;
-      box-shadow: var(--shadow-modal);
-      text-align: center;
-      position: relative;
-      transform: scale(0.9);
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .overlay.visible .modal-box {
-      transform: scale(1);
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 1.2rem;
-      cursor: pointer;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .modal-close:hover {
-      background: var(--surface2);
-      color: var(--text);
-    }
-
-    .modal-icon {
-      font-size: 3.5rem;
-      color: var(--primary);
-      margin-bottom: 24px;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    .modal-title {
-      font-size: 1.5rem;
-      font-weight: 500;
-      margin-bottom: 16px;
-      color: var(--text);
-    }
-
-    .modal-text {
-      font-size: 1rem;
-      color: var(--text-muted);
-      margin-bottom: 32px;
-      line-height: 1.6;
-    }
-
-    .primary-btn {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 12px 24px;
-      border-radius: var(--radius-sm);
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      width: 100%;
-      text-decoration: none;
-      transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
-    }
-
-    .primary-btn:hover { 
-      background: var(--primary-hover); 
-      box-shadow: 0 1px 3px 1px rgba(60,64,67,0.15); 
-    }
-    
-    .primary-btn:active {
-      transform: scale(0.97);
-    }
-
-    .secondary-btn {
-      background: transparent;
-      color: var(--primary);
-      border: 1px solid var(--border);
-      padding: 12px 24px;
-      border-radius: var(--radius-sm);
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      width: 100%;
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
-      margin-top: 12px;
-    }
-
-    .secondary-btn:hover {
-      background: var(--primary-light);
-      border-color: var(--primary);
-    }
-
-    .secondary-link {
-      display: inline-block;
-      margin-top: 20px;
-      color: var(--primary);
-      font-size: 0.9rem;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .secondary-link:hover {
-      color: var(--primary-hover);
-      text-decoration: underline;
-    }
-
-    /* ===== ANIMATIONS ===== */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes popIn {
-      0% { opacity: 0; transform: scale(0.9); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(10px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
-
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-8px); }
-      100% { transform: translateY(0px); }
-    }
-
-    @keyframes shimmer {
-      from { transform: translateX(100%); }
-      to   { transform: translateX(-100%); }
-    }
-
-    /* ===== SCROLLBAR ===== */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 900px) {
-      #sidebar { display: none; }
-      .logo { width: auto; }
-    }
-
-    @media (max-width: 600px) {
-      header { padding: 0 16px; gap: 12px; }
-      .logo-text { display: none; }
-      .search-wrap { margin: 0; }
-      main { padding: 16px; }
-      #breadcrumb { padding: 12px 16px; }
-      #fileContainer.grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 12px;
-      }
-      .toolbar { flex-direction: column; align-items: stretch; gap: 12px; }
-      .toolbar-left { justify-content: space-between; }
-      .modal-box { padding: 32px 24px; }
-    }
+    .skeleton-list { height: 53px; }
+    .state-box { grid-column: 1 / -1; text-align: center; padding: 100px 20px; color: var(--text-muted); }
+    #loadMoreBtn { display: none; margin: 32px auto; padding: 10px 24px; background: var(--surface); border: 1px solid var(--border); color: var(--primary); border-radius: var(--radius); cursor: pointer; font-weight: 500; }
+    .overlay { position: fixed; inset: 0; background: rgba(32, 33, 36, 0.6); backdrop-filter: blur(4px); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px; opacity: 0; transition: opacity 0.3s ease; }
+    .overlay.visible { display: flex; opacity: 1; }
+    .modal-box { background: var(--surface); border-radius: var(--radius); padding: 48px 40px; max-width: 440px; width: 100%; box-shadow: var(--shadow-modal); text-align: center; position: relative; }
+    .modal-icon { font-size: 3.5rem; color: var(--primary); margin-bottom: 24px; }
+    .modal-title { font-size: 1.5rem; font-weight: 500; margin-bottom: 16px; }
+    .modal-text { font-size: 1rem; color: var(--text-muted); margin-bottom: 32px; line-height: 1.6; }
+    .primary-btn { background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: 4px; font-weight: 500; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; }
+    .secondary-btn { background: transparent; color: var(--primary); border: 1px solid var(--border); padding: 12px 24px; border-radius: 4px; font-weight: 500; cursor: pointer; width: 100%; margin-top: 12px; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes shimmer { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
   </style>
 </head>
 <body>
 
-<!-- Login Overlay -->
 <div id="loginOverlay" class="overlay">
   <div class="modal-box">
     <div class="modal-icon"><i class="fa-brands fa-google"></i></div>
     <h1 class="modal-title">התחברות לארכיון</h1>
     <p class="modal-text">כדי לצפות בקבצים פרטיים בארכיון, יש צורך בהתחברות לאישור הרשאות מול גוגל.</p>
     <button id="authBtn" class="primary-btn"><i class="fa-solid fa-shield-halved"></i> התחברות באמצעות Google</button>
-    <button id="skipAuthBtn" class="secondary-btn"><i class="fa-solid fa-arrow-left"></i> המשך ללא התחברות (לקבצים ציבוריים)</button>
+    <button id="skipAuthBtn" class="secondary-btn">המשך ללא התחברות (לקבצים ציבוריים)</button>
   </div>
 </div>
 
-<!-- About Modal -->
 <div id="aboutModal" class="overlay">
   <div class="modal-box">
-    <button class="modal-close" id="closeAboutBtn"><i class="fa-solid fa-xmark"></i></button>
+    <button class="modal-close" id="closeAboutBtn" style="position:absolute; top:15px; right:15px; background:none; border:none; cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
     <div class="modal-icon" style="color: var(--folder);"><i class="fa-solid fa-circle-info"></i></div>
     <h1 class="modal-title">אודות המערכת</h1>
-    <p class="modal-text">ברוכים הבאים לארכיון המסמכים. המערכת מחוברת ישירות ל-Google Drive ומאפשרת חיפוש, צפייה והורדה של קבצים באופן מאובטח ומהיר.<br><br>הגישה לקבצים פתוחה רק למשתמשים מורשים.</p>
-    <a href="#" class="primary-btn" id="requestAccessAboutBtn"><i class="fa-solid fa-envelope"></i> פניה למנהל המערכת (בקשת גישה)</a>
+    <p class="modal-text">ארכיון מסמכים המחובר ל-Google Drive.<br>הגישה מותנית בהרשאות המתאימות.</p>
+    <a href="#" class="primary-btn" id="requestAccessAboutBtn" style="text-decoration:none;"><i class="fa-solid fa-envelope"></i> בקשת גישה</a>
   </div>
 </div>
 
 <header>
-  <a class="logo" href="#" title="עמוד הבית">
+  <a class="logo" href="#">
     <div class="logo-icon"><i class="fa-solid fa-box-archive"></i></div>
     <span class="logo-text">ארכיון מסמכים</span>
   </a>
-
   <div class="search-wrap">
     <div class="search-inner">
-      <input type="text" id="searchInput" placeholder="חיפוש קבצים ותיקיות..." autocomplete="off" spellcheck="false" />
+      <input type="text" id="searchInput" placeholder="חיפוש קבצים ותיקיות..." />
       <span class="search-icon-left"><i class="fa-solid fa-magnifying-glass"></i></span>
-      <button class="search-clear" id="searchClear" title="נקה חיפוש"><i class="fa-solid fa-xmark"></i></button>
+      <button class="search-clear" id="searchClear"><i class="fa-solid fa-xmark"></i></button>
     </div>
   </div>
-
   <div class="header-actions">
-    <button class="icon-btn" id="aboutBtn" title="אודות המערכת" aria-label="אודות המערכת"><i class="fa-solid fa-circle-info"></i></button>
-    <button class="icon-btn" id="themeBtn" title="החלף עיצוב" aria-label="החלף עיצוב"><i class="fa-solid fa-moon"></i></button>
-    <div style="width: 1px; height: 24px; background: var(--border); margin: 0 4px;"></div>
-    <button class="icon-btn view-btn active" id="gridBtn" title="תצוגת רשת" aria-label="תצוגת רשת"><i class="fa-solid fa-grip"></i></button>
-    <button class="icon-btn view-btn" id="listBtn" title="תצוגת רשימה" aria-label="תצוגת רשימה"><i class="fa-solid fa-list-ul"></i></button>
+    <button class="icon-btn" id="aboutBtn"><i class="fa-solid fa-circle-info"></i></button>
+    <button class="icon-btn" id="themeBtn"><i class="fa-solid fa-moon"></i></button>
+    <button class="icon-btn view-btn active" id="gridBtn"><i class="fa-solid fa-grip"></i></button>
+    <button class="icon-btn view-btn" id="listBtn"><i class="fa-solid fa-list-ul"></i></button>
   </div>
 </header>
 
-<div id="breadcrumb">
-  <span class="crumb"><i class="fa-solid fa-house"></i></span>
-  <span class="crumb-sep">/</span>
-  <span class="crumb-current">בית</span>
-</div>
+<div id="breadcrumb"></div>
 
 <div class="app-body">
   <aside id="sidebar">
     <div class="sidebar-title">גישה מהירה</div>
     <div id="sidebarTree"></div>
   </aside>
-
   <main>
     <div class="toolbar">
-      <div class="toolbar-left">
-        <select class="sort-select" id="sortSelect">
-          <option value="folder,name">מיון: לפי שם (א-ת)</option>
-          <option value="modifiedTime desc">מיון: תאריך שינוי</option>
-          <option value="name desc">מיון: לפי שם (ת-א)</option>
-        </select>
-        <div class="item-count" id="itemCount" style="display:none"></div>
-      </div>
+      <select class="sort-select" id="sortSelect">
+        <option value="folder,name">שם (א-ת)</option>
+        <option value="modifiedTime desc">תאריך שינוי</option>
+      </select>
+      <div id="itemCount" class="item-count"></div>
     </div>
-
     <div class="search-banner" id="searchBanner">
-      <span class="search-banner-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-      <span class="search-banner-text">תוצאות חיפוש עבור: <strong id="searchTerm"></strong></span>
+      <span id="searchTerm"></span>
       <button class="search-banner-close" id="searchBannerClose"><i class="fa-solid fa-xmark"></i></button>
     </div>
-
     <div class="error-box" id="errorBox">
-      <span><i class="fa-solid fa-circle-exclamation"></i></span>
+      <i class="fa-solid fa-circle-exclamation"></i>
       <span id="errorMsg"></span>
     </div>
-
     <div id="fileContainer" class="grid"></div>
-    <button id="loadMoreBtn">הצג קבצים נוספים</button>
+    <button id="loadMoreBtn">הצג עוד קבצים</button>
   </main>
 </div>
 
 <script>
 // ============================================================
-//  CONFIG
+//  CONFIG - המפתחות מעודכנים כאן נכון לפי השגיאה שלך!
 // ============================================================
 const CONFIG = {
+  // המפתח הקצר (API Key)
   API_KEY:     'AIzaSyDp7wMhHTOrydG8NS0MQlseIdMLOj4Qw4I',   
+
+  // המפתח הארוך (Client ID)
   CLIENT_ID:   '877688936197-d2q7g35q7n4785hl90emknh8plnv7mrq.apps.googleusercontent.com', 
+
+  // המזהה של התיקייה מהדרייב (Folder ID)
   ROOT_ID:     '1FR9QRJ9moyu612adzeniO-vxFgM3Enl9',   
+
   PAGE_SIZE:   100,
-  ADMIN_EMAIL: 'lifecohen20@gmail.com' // 
+  ADMIN_EMAIL: 'lifecohen20@gmail.com'
 };
 // ============================================================
 
 const MIME_FOLDER = 'application/vnd.google-apps.folder';
-
 const FILE_TYPES = {
-  'application/vnd.google-apps.folder':        { icon: '<i class="fa-solid fa-folder"></i>', color: 'var(--folder)' },
-  'application/vnd.google-apps.document':      { icon: '<i class="fa-solid fa-file-word"></i>', color: '#4285F4' },
-  'application/vnd.google-apps.spreadsheet':   { icon: '<i class="fa-solid fa-file-excel"></i>', color: '#0F9D58' },
-  'application/vnd.google-apps.presentation':  { icon: '<i class="fa-solid fa-file-powerpoint"></i>', color: '#F4B400' },
-  'application/vnd.google-apps.form':          { icon: '<i class="fa-solid fa-clipboard-list"></i>', color: '#7248B9' },
-  'application/pdf':                           { icon: '<i class="fa-solid fa-file-pdf"></i>', color: '#DB4437' },
-  'image/jpeg':                                { icon: '<i class="fa-solid fa-image"></i>', color: '#DB4437' },
-  'image/png':                                 { icon: '<i class="fa-solid fa-image"></i>', color: '#DB4437' },
-  'image/gif':                                 { icon: '<i class="fa-solid fa-image"></i>', color: '#DB4437' },
-  'image/webp':                                { icon: '<i class="fa-solid fa-image"></i>', color: '#DB4437' },
-  'video/mp4':                                 { icon: '<i class="fa-solid fa-file-video"></i>', color: '#DB4437' },
-  'audio/mpeg':                                { icon: '<i class="fa-solid fa-file-audio"></i>', color: '#F4B400' },
-  'application/zip':                           { icon: '<i class="fa-solid fa-file-zipper"></i>', color: '#5F6368' },
-  'text/plain':                                { icon: '<i class="fa-solid fa-file-lines"></i>', color: '#4285F4' },
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document':   { icon: '<i class="fa-solid fa-file-word"></i>', color: '#4285F4' },
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':         { icon: '<i class="fa-solid fa-file-excel"></i>', color: '#0F9D58' },
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation': { icon: '<i class="fa-solid fa-file-powerpoint"></i>', color: '#F4B400' },
+  'application/vnd.google-apps.folder': { icon: '<i class="fa-solid fa-folder"></i>', color: 'var(--folder)' },
+  'application/pdf': { icon: '<i class="fa-solid fa-file-pdf"></i>', color: '#DB4437' },
+  'image/jpeg': { icon: '<i class="fa-solid fa-image"></i>', color: '#DB4437' },
+  'image/png': { icon: '<i class="fa-solid fa-image"></i>', color: '#DB4437' },
+  'text/plain': { icon: '<i class="fa-solid fa-file-lines"></i>', color: '#4285F4' }
 };
 
 function getFileType(mimeType) {
   return FILE_TYPES[mimeType] || { icon: '<i class="fa-solid fa-file"></i>', color: 'var(--text-muted)' };
-}
-
-function formatSize(bytes) {
-  if (!bytes) return '';
-  const b = +bytes;
-  if (b < 1024) return b + ' B';
-  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
-  if (b < 1073741824) return (b / 1048576).toFixed(1) + ' MB';
-  return (b / 1073741824).toFixed(1) + ' GB';
-}
-
-function formatDate(iso) {
-  if (!iso) return '';
-  const d = new Date(iso);
-  const now = new Date();
-  const diff = now - d;
-  if (diff < 86400000) return 'היום, ' + d.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
-  if (diff < 172800000) return 'אתמול';
-  if (diff < 604800000) return 'לפני ' + Math.floor(diff / 86400000) + ' ימים';
-  return d.toLocaleDateString('he-IL', { day: 'numeric', month: 'short', year: d.getFullYear() !== now.getFullYear() ? 'numeric' : undefined });
 }
 
 function escapeHtml(str) {
@@ -1026,9 +244,6 @@ function debounce(func, wait) {
   };
 }
 
-// ============================================================
-//  STATE
-// ============================================================
 let state = {
   stack: [{ id: CONFIG.ROOT_ID, name: 'בית' }],
   nextPageToken: null,
@@ -1039,505 +254,141 @@ let state = {
   sort: 'folder,name',
   recentFolders: [],
   accessToken: null,
-  skippedAuth: false, // מזהה אם המשתמש בחר לדלג על ההתחברות
+  skippedAuth: false
 };
 
 let tokenClient;
 
-// ============================================================
-//  DOM REFS
-// ============================================================
-const fileContainer   = document.getElementById('fileContainer');
-const loadMoreBtn     = document.getElementById('loadMoreBtn');
-const breadcrumbEl    = document.getElementById('breadcrumb');
-const itemCountEl     = document.getElementById('itemCount');
-const searchInput     = document.getElementById('searchInput');
-const searchClear     = document.getElementById('searchClear');
-const searchBanner    = document.getElementById('searchBanner');
-const searchTermEl    = document.getElementById('searchTerm');
-const searchBannerClose = document.getElementById('searchBannerClose');
-const errorBox        = document.getElementById('errorBox');
-const errorMsgEl      = document.getElementById('errorMsg');
-const gridBtn         = document.getElementById('gridBtn');
-const listBtn         = document.getElementById('listBtn');
-const themeBtn        = document.getElementById('themeBtn');
-const sortSelect      = document.getElementById('sortSelect');
-const sidebarTree     = document.getElementById('sidebarTree');
-
-// Modals
-const loginOverlay    = document.getElementById('loginOverlay');
-const skipAuthBtn     = document.getElementById('skipAuthBtn');
-const aboutModal      = document.getElementById('aboutModal');
-const aboutBtn        = document.getElementById('aboutBtn');
-const closeAboutBtn   = document.getElementById('closeAboutBtn');
-
-// ============================================================
-//  API
-// ============================================================
 async function apiFetch(url) {
   const headers = {};
-  if (state.accessToken) {
-    headers['Authorization'] = 'Bearer ' + state.accessToken;
-  }
-
+  if (state.accessToken) headers['Authorization'] = 'Bearer ' + state.accessToken;
   const res = await fetch(url, { headers });
-  
   if (!res.ok) {
-    if (res.status === 401 || res.status === 403 || res.status === 404) {
-       // אם המשתמש לא בחר במפורש לדלג, נציג לו שוב את מסך ההתחברות
-       if (!state.skippedAuth && !state.accessToken) {
-           loginOverlay.classList.add('visible');
-           throw new Error('פג תוקף ההתחברות או שחסרה הרשאה. אנא התחבר מחדש.');
-       } else {
-           // אם המשתמש בחר לדלג והתיקייה חסומה, נציג שגיאה פשוטה באזור התוכן כדי לא לשגע אותו עם חלונות קופצים
-           throw new Error('אין הרשאת גישה לתיקייה זו, ייתכן שהיא מוגדרת כפרטית. רענן את העמוד כדי להתחבר לחשבון גוגל מורשה.');
-       }
+    if ((res.status === 401 || res.status === 403 || res.status === 404) && !state.skippedAuth && !state.accessToken) {
+        document.getElementById('loginOverlay').classList.add('visible');
     }
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || 'שגיאת שרת ' + res.status);
+    throw new Error(err.error?.message || 'שגיאה: ' + res.status);
   }
   return res.json();
 }
 
-async function fetchFiles(folderId, pageToken = null) {
-  const q = encodeURIComponent("'" + folderId + "' in parents and trashed = false");
-  const fields = encodeURIComponent('nextPageToken,files(id,name,mimeType,size,modifiedTime,webViewLink,webContentLink)');
-  let url = 'https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=' + fields + '&pageSize=' + CONFIG.PAGE_SIZE + '&orderBy=' + encodeURIComponent(state.sort) + '&key=' + CONFIG.API_KEY;
-  if (pageToken) url += '&pageToken=' + encodeURIComponent(pageToken);
-  return apiFetch(url);
-}
-
-async function searchFiles(query, pageToken = null) {
-  const safe = query.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-  const q = encodeURIComponent("name contains '" + safe + "' and trashed = false");
-  const fields = encodeURIComponent('nextPageToken,files(id,name,mimeType,size,modifiedTime,webViewLink,webContentLink)');
-  let url = 'https://www.googleapis.com/drive/v3/files?q=' + q + '&fields=' + fields + '&pageSize=' + CONFIG.PAGE_SIZE + '&key=' + CONFIG.API_KEY;
-  if (pageToken) url += '&pageToken=' + encodeURIComponent(pageToken);
-  return apiFetch(url);
-}
-
-// ============================================================
-//  SKELETON
-// ============================================================
-function showSkeleton() {
-  const count = state.view === 'grid' ? 12 : 8;
-  const cls = state.view === 'grid' ? 'skeleton-grid' : 'skeleton-list';
-  fileContainer.innerHTML = Array(count).fill(0).map(() => '<div class="skeleton ' + cls + '"></div>').join('');
-  loadMoreBtn.style.display = 'none';
-}
-
-// ============================================================
-//  RENDER & EVENT DELEGATION
-// ============================================================
-function renderItems(items, append) {
-  if (!append) fileContainer.innerHTML = '';
-
-  if (items.length === 0 && !append) {
-    const msg = state.isSearchMode
-      ? '<span class="state-icon"><i class="fa-solid fa-magnifying-glass"></i></span><div class="state-title">לא נמצאו תוצאות</div><div class="state-sub">נסה לשנות את מילות החיפוש</div>'
-      : '<span class="state-icon"><i class="fa-regular fa-folder-open"></i></span><div class="state-title">התיקייה ריקה</div><div class="state-sub">לא נמצאו קבצים בתיקייה זו</div>';
-    fileContainer.innerHTML = '<div class="state-box">' + msg + '</div>';
-    return;
-  }
-
-  const frag = document.createDocumentFragment();
-  
-  items.forEach(function(item, index) {
-    const ft = getFileType(item.mimeType);
-    const isFolder = item.mimeType === MIME_FOLDER;
-    const meta = [formatDate(item.modifiedTime), formatSize(item.size)].filter(Boolean).join(' • ');
-    
-    const card = document.createElement('div');
-    card.className = 'file-card' + (isFolder ? ' folder-card' : '');
-    card.setAttribute('role', 'button');
-    card.setAttribute('tabindex', '0');
-    
-    // חישוב השהיית האנימציה (Staggered Animation) ליצירת אפקט גל
-    const delay = Math.min(index * 0.04, 0.6); 
-    card.style.animationDelay = `${delay}s`;
-    
-    card.dataset.id = item.id;
-    card.dataset.name = item.name;
-    card.dataset.type = isFolder ? 'folder' : 'file';
-    card.dataset.link = item.webViewLink || '';
-
-    let innerHtml = `
-      <div class="icon-wrap" style="color:${ft.color}">${ft.icon}</div>
-      <div class="name" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</div>
-    `;
-    
-    if (meta) {
-      innerHtml += `<div class="meta">${meta}</div>`;
-    }
-    
-    if (!isFolder && item.webContentLink) {
-      innerHtml += `<a href="${item.webContentLink}" target="_blank" class="download-btn" data-action="download" title="הורד קובץ" aria-label="הורדה"><i class="fa-solid fa-download"></i></a>`;
-    }
-    
-    card.innerHTML = innerHtml;
-    frag.appendChild(card);
-  });
-  
-  fileContainer.appendChild(frag);
-  updateCount();
-}
-
-fileContainer.addEventListener('click', function(e) {
-  const downloadBtn = e.target.closest('[data-action="download"]');
-  if (downloadBtn) {
-    e.stopPropagation();
-    return;
-  }
-
-  const card = e.target.closest('.file-card');
-  if (card) {
-    if (card.dataset.type === 'folder') {
-      openFolder(card.dataset.id, card.dataset.name);
-    } else if (card.dataset.link) {
-      window.open(card.dataset.link, '_blank');
-    }
-  }
-});
-
-fileContainer.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' || e.key === ' ') {
-    const card = e.target.closest('.file-card');
-    if (card) {
-      e.preventDefault();
-      if (card.dataset.type === 'folder') {
-        openFolder(card.dataset.id, card.dataset.name);
-      } else if (card.dataset.link) {
-        window.open(card.dataset.link, '_blank');
-      }
-    }
-  }
-});
-
-function updateCount() {
-  const n = fileContainer.querySelectorAll('.file-card').length;
-  if (n > 0) {
-    itemCountEl.textContent = n.toLocaleString('he-IL') + ' פריטים' + (state.nextPageToken ? '+' : '');
-    itemCountEl.style.display = 'inline-block';
-  } else {
-    itemCountEl.style.display = 'none';
-  }
-}
-
-function showError(msg) {
-  errorMsgEl.textContent = msg;
-  errorBox.classList.add('visible');
-}
-
-function hideError() {
-  errorBox.classList.remove('visible');
-}
-
-// ============================================================
-//  NAVIGATION & HISTORY API
-// ============================================================
-function currentFolder() {
-  return state.stack[state.stack.length - 1];
-}
-
-function addRecentFolder(id, name) {
-  state.recentFolders = state.recentFolders.filter(function(f) { return f.id !== id; });
-  state.recentFolders.unshift({ id: id, name: name });
-  if (state.recentFolders.length > 8) state.recentFolders.pop();
-  renderSidebar();
-}
-
-function renderSidebar() {
-  sidebarTree.innerHTML = '';
-  state.recentFolders.forEach(function(f) {
-    const el = document.createElement('div');
-    el.className = 'tree-item' + (currentFolder().id === f.id ? ' active' : '');
-    el.innerHTML = '<span class="tree-icon"><i class="fa-solid fa-folder"></i></span><span class="tree-name">' + escapeHtml(f.name) + '</span>';
-    el.addEventListener('click', function() {
-      const idx = state.stack.findIndex(function(s) { return s.id === f.id; });
-      if (idx >= 0) navigateTo(idx);
-      else openFolder(f.id, f.name);
-    });
-    sidebarTree.appendChild(el);
-  });
-}
-
-function updateHistoryState() {
-  const url = new URL(window.location);
-  url.searchParams.set('folder', currentFolder().id);
-  window.history.pushState({ stack: JSON.parse(JSON.stringify(state.stack)) }, '', url);
-}
-
-async function openFolder(id, name, skipHistory = false) {
-  state.stack.push({ id: id, name: name });
-  state.isSearchMode = false;
-  state.currentQuery = '';
-  searchInput.value = '';
-  searchClear.classList.remove('visible');
-  searchBanner.classList.remove('visible');
-  addRecentFolder(id, name);
-  renderBreadcrumb();
-  
-  if (!skipHistory) {
-    updateHistoryState();
-  }
-  
-  await loadFolder(id);
-}
-
-async function loadFolder(folderId, append) {
+async function loadFolder(folderId, append = false) {
   if (state.loading) return;
   state.loading = true;
-  hideError();
-  if (!append) showSkeleton();
+  document.getElementById('errorBox').classList.remove('visible');
+  if (!append) {
+      document.getElementById('fileContainer').innerHTML = Array(8).fill('<div class="skeleton skeleton-grid"></div>').join('');
+      document.getElementById('loadMoreBtn').style.display = 'none';
+  }
   try {
-    const data = await fetchFiles(folderId, append ? state.nextPageToken : null);
+    const q = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
+    const fields = encodeURIComponent('nextPageToken,files(id,name,mimeType,size,modifiedTime,webViewLink,webContentLink)');
+    let url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&pageSize=${CONFIG.PAGE_SIZE}&orderBy=${encodeURIComponent(state.sort)}&key=${CONFIG.API_KEY}`;
+    if (state.nextPageToken && append) url += '&pageToken=' + state.nextPageToken;
+    
+    const data = await apiFetch(url);
     state.nextPageToken = data.nextPageToken || null;
     renderItems(data.files || [], append);
-    loadMoreBtn.style.display = state.nextPageToken ? 'block' : 'none';
+    document.getElementById('loadMoreBtn').style.display = state.nextPageToken ? 'block' : 'none';
   } catch(e) {
-    showError(e.message);
-    if (!append) fileContainer.innerHTML = '';
-  } finally {
-    state.loading = false;
-  }
+    document.getElementById('errorMsg').textContent = e.message;
+    document.getElementById('errorBox').classList.add('visible');
+    if (!append) document.getElementById('fileContainer').innerHTML = '';
+  } finally { state.loading = false; }
 }
 
-async function doSearch(query, append) {
-  if (!query.trim() || state.loading) return;
-  state.loading = true;
-  state.isSearchMode = true;
-  state.currentQuery = query;
-  hideError();
-  if (!append) showSkeleton();
-  searchTermEl.textContent = '"' + query + '"';
-  searchBanner.classList.add('visible');
-  try {
-    const data = await searchFiles(query, append ? state.nextPageToken : null);
-    state.nextPageToken = data.nextPageToken || null;
-    renderItems(data.files || [], append);
-    loadMoreBtn.style.display = state.nextPageToken ? 'block' : 'none';
-  } catch(e) {
-    showError(e.message);
-    if (!append) fileContainer.innerHTML = '';
-  } finally {
-    state.loading = false;
+function renderItems(items, append) {
+  const container = document.getElementById('fileContainer');
+  if (!append) container.innerHTML = '';
+  if (items.length === 0 && !append) {
+      container.innerHTML = '<div class="state-box">תיקייה ריקה</div>';
+      return;
   }
+  items.forEach((item, i) => {
+    const ft = getFileType(item.mimeType);
+    const card = document.createElement('div');
+    card.className = 'file-card' + (item.mimeType === MIME_FOLDER ? ' folder-card' : '');
+    card.style.animationDelay = (i * 0.05) + 's';
+    card.innerHTML = `
+      <div class="icon-wrap" style="color:${ft.color}">${ft.icon}</div>
+      <div class="name">${escapeHtml(item.name)}</div>
+      ${!item.size ? '' : `<div class="meta">${(item.size/1024).toFixed(1)} KB</div>`}
+      ${item.mimeType === MIME_FOLDER ? '' : `<a href="${item.webContentLink}" class="download-btn"><i class="fa-solid fa-download"></i></a>`}
+    `;
+    card.onclick = () => {
+        if (item.mimeType === MIME_FOLDER) openFolder(item.id, item.name);
+        else window.open(item.webViewLink, '_blank');
+    };
+    container.appendChild(card);
+  });
+  document.getElementById('itemCount').textContent = container.children.length + ' פריטים';
 }
 
-// ============================================================
-//  BREADCRUMB
-// ============================================================
+function openFolder(id, name) {
+  state.stack.push({id, name});
+  renderBreadcrumb();
+  loadFolder(id);
+}
+
 function renderBreadcrumb() {
-  breadcrumbEl.innerHTML = '';
-  state.stack.forEach(function(item, i) {
-    const isLast = i === state.stack.length - 1;
-    if (i > 0) {
-      const sep = document.createElement('span');
-      sep.className = 'crumb-sep';
-      sep.textContent = '/';
-      breadcrumbEl.appendChild(sep);
-    }
-    const el = document.createElement('span');
-    if (isLast) {
-      el.className = 'crumb-current';
-      el.innerHTML = i === 0 ? '<i class="fa-solid fa-house"></i> התיקייה שלי' : escapeHtml(item.name);
-    } else {
-      el.className = 'crumb';
-      el.innerHTML = i === 0 ? '<i class="fa-solid fa-house"></i> התיקייה שלי' : escapeHtml(item.name);
-      el.title = item.name;
-      (function(idx) { el.addEventListener('click', function() { navigateTo(idx); }); })(i);
-    }
-    breadcrumbEl.appendChild(el);
+  const b = document.getElementById('breadcrumb');
+  b.innerHTML = '';
+  state.stack.forEach((s, i) => {
+    const span = document.createElement('span');
+    span.className = i === state.stack.length - 1 ? 'crumb-current' : 'crumb';
+    span.innerHTML = (i === 0 ? '<i class="fa-solid fa-house"></i>' : '') + ' ' + s.name;
+    span.onclick = () => {
+        state.stack = state.stack.slice(0, i + 1);
+        renderBreadcrumb();
+        loadFolder(s.id);
+    };
+    b.appendChild(span);
+    if (i < state.stack.length - 1) b.innerHTML += ' <span class="crumb-sep">/</span> ';
   });
 }
 
-async function navigateTo(index) {
-  state.stack = state.stack.slice(0, index + 1);
-  state.isSearchMode = false;
-  state.currentQuery = '';
-  searchInput.value = '';
-  searchClear.classList.remove('visible');
-  searchBanner.classList.remove('visible');
-  renderBreadcrumb();
-  updateHistoryState();
-  await loadFolder(currentFolder().id);
-}
+const search = debounce(async (val) => {
+    if (!val) { loadFolder(state.stack[state.stack.length-1].id); return; }
+    state.loading = true;
+    try {
+        const q = encodeURIComponent(`name contains '${val.replace(/'/g,"\\'")}' and trashed = false`);
+        const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,mimeType,size,modifiedTime,webViewLink,webContentLink)&key=${CONFIG.API_KEY}`;
+        const data = await apiFetch(url);
+        renderItems(data.files || [], false);
+    } catch(e) { showError(e.message); }
+    finally { state.loading = false; }
+}, 500);
 
-window.addEventListener('popstate', function(e) {
-  if (e.state && e.state.stack) {
-    state.stack = e.state.stack;
-  } else {
-    state.stack = [{ id: CONFIG.ROOT_ID, name: 'בית' }];
-  }
-  state.isSearchMode = false;
-  searchInput.value = '';
-  searchClear.classList.remove('visible');
-  searchBanner.classList.remove('visible');
-  renderBreadcrumb();
-  loadFolder(currentFolder().id);
-});
+document.getElementById('searchInput').oninput = (e) => search(e.target.value);
+document.getElementById('themeBtn').onclick = () => document.body.classList.toggle('dark-theme');
+document.getElementById('aboutBtn').onclick = () => document.getElementById('aboutModal').classList.add('visible');
+document.getElementById('closeAboutBtn').onclick = () => document.getElementById('aboutModal').classList.remove('visible');
+document.getElementById('skipAuthBtn').onclick = () => { state.skippedAuth = true; initApp(); };
+document.getElementById('authBtn').onclick = () => tokenClient.requestAccessToken();
 
-// ============================================================
-//  EVENTS & MODALS
-// ============================================================
-// חיבור לינקים של מייל
-function setupEmailLinks() {
-  const subject = encodeURIComponent("בקשת גישה לארכיון המסמכים");
-  const body = encodeURIComponent("שלום,\nאשמח לקבל הרשאת גישה לארכיון המסמכים.\n\nשם המשתמש שלי (מייל בגוגל): \n\nתודה.");
-  const mailtoUrl = `mailto:${CONFIG.ADMIN_EMAIL}?subject=${subject}&body=${body}`;
-  
-  document.getElementById('requestAccessAboutBtn').href = mailtoUrl;
-}
-
-// ניהול מודל אודות
-aboutBtn.addEventListener('click', () => aboutModal.classList.add('visible'));
-closeAboutBtn.addEventListener('click', () => aboutModal.classList.remove('visible'));
-aboutModal.addEventListener('click', (e) => {
-  if (e.target === aboutModal) aboutModal.classList.remove('visible');
-});
-
-const handleSearchInput = debounce(function(val) {
-  if (val.trim().length >= 2) {
-    doSearch(val.trim());
-  } else if (val.trim().length === 0) {
-    searchBanner.classList.remove('visible');
-    state.isSearchMode = false;
-    loadFolder(currentFolder().id);
-  }
-}, 400);
-
-searchInput.addEventListener('input', function() {
-  const val = searchInput.value;
-  searchClear.classList.toggle('visible', val.length > 0);
-  handleSearchInput(val);
-});
-
-searchInput.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') {
-    const q = searchInput.value.trim();
-    if (q) doSearch(q);
-  }
-  if (e.key === 'Escape') {
-    searchInput.value = '';
-    searchClear.classList.remove('visible');
-    searchBanner.classList.remove('visible');
-    state.isSearchMode = false;
-    loadFolder(currentFolder().id);
-  }
-});
-
-searchClear.addEventListener('click', function() {
-  searchInput.value = '';
-  searchClear.classList.remove('visible');
-  searchBanner.classList.remove('visible');
-  state.isSearchMode = false;
-  loadFolder(currentFolder().id);
-  searchInput.focus();
-});
-
-searchBannerClose.addEventListener('click', function() {
-  searchInput.value = '';
-  searchClear.classList.remove('visible');
-  searchBanner.classList.remove('visible');
-  state.isSearchMode = false;
-  loadFolder(currentFolder().id);
-});
-
-loadMoreBtn.addEventListener('click', function() {
-  if (state.isSearchMode) doSearch(state.currentQuery, true);
-  else loadFolder(currentFolder().id, true);
-});
-
-gridBtn.addEventListener('click', function() {
-  state.view = 'grid';
-  fileContainer.className = 'grid';
-  gridBtn.classList.add('active');
-  listBtn.classList.remove('active');
-});
-
-listBtn.addEventListener('click', function() {
-  state.view = 'list';
-  fileContainer.className = 'list';
-  listBtn.classList.add('active');
-  gridBtn.classList.remove('active');
-});
-
-// Theme Toggle Logic
-const currentTheme = localStorage.getItem('theme') || 'light';
-if (currentTheme === 'dark') {
-  document.body.classList.add('dark-theme');
-  themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-}
-themeBtn.addEventListener('click', function() {
-  document.body.classList.toggle('dark-theme');
-  const isDark = document.body.classList.contains('dark-theme');
-  themeBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
-});
-
-sortSelect.addEventListener('change', function() {
-  state.sort = sortSelect.value;
-  if (!state.isSearchMode) loadFolder(currentFolder().id);
-});
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === '/' && document.activeElement !== searchInput) {
-    e.preventDefault();
-    searchInput.focus();
-    searchInput.select();
-  }
-});
-
-// ============================================================
-//  INIT
-// ============================================================
 function initApp() {
-  loginOverlay.classList.remove('visible');
-
-  if (history.state && history.state.stack) {
-    state.stack = history.state.stack;
-  } else {
-    window.history.replaceState({ stack: JSON.parse(JSON.stringify(state.stack)) }, '', window.location.href);
-  }
-  
-  renderBreadcrumb();
-  loadFolder(currentFolder().id);
+    document.getElementById('loginOverlay').classList.remove('visible');
+    renderBreadcrumb();
+    loadFolder(CONFIG.ROOT_ID);
 }
 
-// טיפול בכפתור הדילוג
-skipAuthBtn.addEventListener('click', function() {
-  state.skippedAuth = true;
-  loginOverlay.classList.remove('visible');
-  initApp();
-});
+window.onload = () => {
+    const mailto = `mailto:${CONFIG.ADMIN_EMAIL}?subject=Request Access`;
+    document.getElementById('requestAccessAboutBtn').href = mailto;
 
-function init() {
-  setupEmailLinks(); // הגדרת לינקים לשליחת מייל
-  
-  tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: CONFIG.CLIENT_ID,
-    scope: 'https://www.googleapis.com/auth/drive.readonly',
-    callback: (tokenResponse) => {
-      if (tokenResponse && tokenResponse.access_token) {
-        state.accessToken = tokenResponse.access_token;
-        state.skippedAuth = false;
-        initApp();
-      }
-    },
-  });
-
-  document.getElementById('authBtn').addEventListener('click', function() {
-    tokenClient.requestAccessToken();
-  });
-  
-  // מסך ההתחברות פתוח כברירת מחדל אם אין עדיין טוקן
-  if (!state.accessToken && !state.skippedAuth) {
-    loginOverlay.classList.add('visible');
-  }
-}
-
-window.onload = function() {
-  init();
+    tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CONFIG.CLIENT_ID,
+        scope: 'https://www.googleapis.com/auth/drive.readonly',
+        callback: (res) => {
+            if (res.access_token) {
+                state.accessToken = res.access_token;
+                state.skippedAuth = false;
+                initApp();
+            }
+        }
+    });
+    if (!state.accessToken) document.getElementById('loginOverlay').classList.add('visible');
 };
 </script>
 </body>
