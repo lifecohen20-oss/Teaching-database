@@ -6,7 +6,12 @@ from googleapiclient.discovery import build
 def main():
     # קריאת אישורי ההתחברות מהסודות של גיטהאב
     creds_json = json.loads(os.environ['GDRIVE_CREDENTIALS'])
-    creds = service_account.Credentials.from_service_account_info(creds_json, scopes=['[https://www.googleapis.com/auth/drive.readonly](https://www.googleapis.com/auth/drive.readonly)'])
+    
+    # התיקון בוצע כאן - כתובת נקייה ללא סוגריים מיותרים
+    creds = service_account.Credentials.from_service_account_info(
+        creds_json, 
+        scopes=['https://www.googleapis.com/auth/drive.readonly']
+    )
     
     # התחברות לדרייב
     service = build('drive', 'v3', credentials=creds)
