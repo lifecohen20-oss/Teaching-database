@@ -11,8 +11,6 @@ def main():
     folder_id = os.environ['FOLDER_ID']
     
     all_raw_files = {}
-    
-    # החזרנו את ה-thumbnailLink!
     fields = "nextPageToken, files(id, name, mimeType, size, modifiedTime, thumbnailLink, parents, shortcutDetails)"
     
     print("מתחיל סריקה ראשית...")
@@ -35,6 +33,7 @@ def main():
     scanned_folders = set()
     folders_to_scan = []
     
+    # הוספת קיצורי הדרך לסריקה העמוקה
     for f in all_raw_files.values():
         if f.get('mimeType') == 'application/vnd.google-apps.shortcut':
             details = f.get('shortcutDetails', {})
@@ -64,8 +63,16 @@ def main():
                 for item in results.get('files', []):
                     if item['id'] not in all_raw_files:
                         all_raw_files[item['id']] = item
-                        if item.get('mimeType') == 'application/vnd.google-apps.folder':
+                        mime = item.get('mimeType')
+                        
+                        # התיקון כאן: מזהה גם תיקיות רגילות וגם קיצורי דרך לתיקיות *בתוך* תיקיות אחרות
+                        if mime == 'application/vnd.google-apps.folder':
                             folders_to_scan.append(item['id'])
+                        elif mime == 'application/vnd.google-apps.shortcut':
+                            details = item.get('shortcutDetails', {})
+                            if details.get('targetMimeType') == 'application/vnd.google-apps.folder':
+                                tid = details.get('targetId')
+                                if tid: folders_to_scan.append(tid)
                             
                 page_token = results.get('nextPageToken', None)
                 if page_token is None:
@@ -75,7 +82,6 @@ def main():
 
     print(f"נסרקו סך הכל {len(all_raw_files)} פריטים. מכווץ למבנה מטריצה...")
 
-    # כיווץ הנתונים למטריצה קלילה
     matrix_files = []
     for f in all_raw_files.values():
         mime = f.get('mimeType', '')
@@ -108,7 +114,7 @@ def main():
     database = {
         "root_folder_id": folder_id,
         "total_items": len(matrix_files),
-        "format": "matrix", # חיווי לאתר שהקובץ עבר למטריצה
+        "format": "matrix",
         "files": matrix_files
     }
 
