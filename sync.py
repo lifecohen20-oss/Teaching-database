@@ -10,14 +10,12 @@ def main():
     service = build('drive', 'v3', credentials=creds)
     folder_id = os.environ['FOLDER_ID']
     
-    all_files = []
+    all_raw_files = {}
     
-    # === התיקון למהירות שיא ===
-    # הסרנו מכאן שדות כבדים ומיותרים כמו webViewLink ו-iconLink.
-    # אנחנו מייצרים אותם לבד באתר! זה יקטין את הקובץ ב-70% וימנע שבירות.
+    # החזרנו את ה-thumbnailLink!
     fields = "nextPageToken, files(id, name, mimeType, size, modifiedTime, thumbnailLink, parents, shortcutDetails)"
     
-    print("מתחיל סריקה ראשית של הארכיון...")
+    print("מתחיל סריקה ראשית...")
     page_token = None
     while True:
         results = service.files().list(
@@ -27,9 +25,9 @@ def main():
             pageToken=page_token
         ).execute()
         
-        items = results.get('files', [])
-        all_files.extend(items)
-        
+        for item in results.get('files', []):
+            all_raw_files[item['id']] = item
+            
         page_token = results.get('nextPageToken', None)
         if page_token is None:
             break
@@ -37,16 +35,15 @@ def main():
     scanned_folders = set()
     folders_to_scan = []
     
-    for f in all_files:
+    for f in all_raw_files.values():
         if f.get('mimeType') == 'application/vnd.google-apps.shortcut':
             details = f.get('shortcutDetails', {})
             if details.get('targetMimeType') == 'application/vnd.google-apps.folder':
-                target_id = details.get('targetId')
-                if target_id:
-                    folders_to_scan.append(target_id)
+                tid = details.get('targetId')
+                if tid: folders_to_scan.append(tid)
                     
     if folders_to_scan:
-        print(f"נמצאו {len(folders_to_scan)} קיצורי דרך לתיקיות. מתחיל סריקה עמוקה שלהן...")
+        print(f"נמצאו {len(folders_to_scan)} קיצורי דרך. סורק את תוכנם...")
         
     while folders_to_scan:
         current_folder_id = folders_to_scan.pop(0)
@@ -64,10 +61,9 @@ def main():
                     pageToken=page_token
                 ).execute()
                 
-                items = results.get('files', [])
-                for item in items:
-                    if not any(existing['id'] == item['id'] for existing in all_files):
-                        all_files.append(item)
+                for item in results.get('files', []):
+                    if item['id'] not in all_raw_files:
+                        all_raw_files[item['id']] = item
                         if item.get('mimeType') == 'application/vnd.google-apps.folder':
                             folders_to_scan.append(item['id'])
                             
@@ -75,20 +71,51 @@ def main():
                 if page_token is None:
                     break
         except Exception as e:
-            print(f"לא ניתן לסרוק את התיקייה {current_folder_id}: {e}")
+            print(f"התעלם מתיקייה {current_folder_id}: {e}")
 
-    print(f"הסריקה הושלמה בהצלחה. סך הכל {len(all_files)} פריטים.")
+    print(f"נסרקו סך הכל {len(all_raw_files)} פריטים. מכווץ למבנה מטריצה...")
+
+    # כיווץ הנתונים למטריצה קלילה
+    matrix_files = []
+    for f in all_raw_files.values():
+        mime = f.get('mimeType', '')
+        if mime == 'application/vnd.google-apps.folder': mime = 'f'
+        elif mime == 'application/vnd.google-apps.shortcut': mime = 's'
+        
+        parent = f.get('parents', [''])[0] if f.get('parents') else ''
+        thumb = f.get('thumbnailLink', '')
+        
+        targetId = ''
+        targetMime = ''
+        if mime == 's':
+            targetId = f.get('shortcutDetails', {}).get('targetId', '')
+            tm = f.get('shortcutDetails', {}).get('targetMimeType', '')
+            if tm == 'application/vnd.google-apps.folder': tm = 'f'
+            targetMime = tm
+
+        matrix_files.append([
+            f.get('id', ''),
+            f.get('name', ''),
+            mime,
+            f.get('size', ''),
+            f.get('modifiedTime', ''),
+            parent,
+            thumb,
+            targetId,
+            targetMime
+        ])
 
     database = {
         "root_folder_id": folder_id,
-        "total_items": len(all_files),
-        "files": all_files
+        "total_items": len(matrix_files),
+        "format": "matrix", # חיווי לאתר שהקובץ עבר למטריצה
+        "files": matrix_files
     }
 
     with open('database.json', 'w', encoding='utf-8') as f:
         json.dump(database, f, ensure_ascii=False, separators=(',', ':'))
     
-    print("קובץ database.json נוצר בהצלחה בפורמט סופר-מכווץ!")
+    print("קובץ database.json מבוסס מטריצה נוצר בהצלחה!")
 
 if __name__ == '__main__':
     main()
