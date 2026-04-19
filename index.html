@@ -157,7 +157,7 @@
     #downloadPanel.open { transform: translateX(0); }
     .dl-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--surface2); }
     .dl-title { font-weight: 700; font-size: 1.1rem; color: var(--text); display: flex; align-items: center; gap: 8px; }
-    .dl-controls { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--surface); }
+    .dl-controls { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--surface); flex-wrap: wrap; gap: 10px; }
     .dl-progress-box { display: flex; flex-direction: column; }
     .dl-progress-box span { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
     .dl-progress-box strong { font-size: 1rem; color: var(--text); font-weight: 800; }
@@ -174,6 +174,10 @@
     .card-action-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
     #fileContainer.list .card-action-btn { position: relative; top: auto; left: auto; opacity: 1; transform: scale(1); box-shadow: none; background: transparent; border-color: transparent; width: auto; height: auto; padding: 8px; }
     #fileContainer.list .card-action-btn:hover { background: var(--primary-light); color: var(--primary); border-radius: var(--radius-sm); }
+    
+    /* אנימציית קליק להורדה */
+    .dl-click-anim { animation: popClick 0.4s ease !important; background: var(--primary) !important; color: #fff !important; border-color: var(--primary) !important; }
+    @keyframes popClick { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
     .overlay { position: fixed; inset: 0; background: rgba(32, 33, 36, 0.6); backdrop-filter: blur(4px); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px; opacity: 0; transition: opacity 0.3s ease; }
     .overlay.visible { display: flex; opacity: 1; }
@@ -191,6 +195,7 @@
     /* ===== עיצוב אזור העלאת הקבצים ===== */
     .upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 40px 20px; text-align: center; background: var(--surface2); cursor: pointer; transition: all 0.3s; margin-bottom: 16px; position: relative; overflow: hidden; }
     .upload-zone:hover { background: var(--surface3); }
+    .upload-zone:hover i { animation: fa-bounce 1s infinite; }
     .upload-zone.dragover { background: var(--primary-light); border-color: var(--primary); }
     .upload-zone i { font-size: 3.5rem; color: var(--primary); margin-bottom: 16px; pointer-events: none; }
     .upload-zone p { margin: 0; color: var(--text-muted); font-size: 1rem; pointer-events: none; }
@@ -244,9 +249,10 @@
             <span>הושלמו</span>
             <strong id="dlProgressText">0 מתוך 0</strong>
         </div>
-        <div style="display: flex; gap: 8px;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button id="resumeDlBtn" onclick="resumeDownloads()" class="secondary-btn" style="margin: 0; padding: 6px 12px; font-size: 0.85rem; display: none; color: #0F9D58; border-color: #0F9D58;"><i class="fa-solid fa-play"></i> המשך</button>
-            <button id="stopDlBtn" onclick="cancelDownloads()" class="primary-btn" style="background: var(--danger); margin: 0; padding: 6px 12px; font-size: 0.85rem; display: none;"><i class="fa-solid fa-stop"></i> עצור הכל</button>
+            <button id="stopDlBtn" onclick="cancelDownloads()" class="primary-btn" style="background: var(--danger); margin: 0; padding: 6px 12px; font-size: 0.85rem; display: none;"><i class="fa-solid fa-stop"></i> עצור</button>
+            <button id="clearDlBtn" onclick="clearDownloadQueue()" class="secondary-btn" style="margin: 0; padding: 6px 12px; font-size: 0.85rem; display: none; color: var(--text-muted); border-color: var(--border);"><i class="fa-solid fa-trash-can"></i> נקה תור</button>
         </div>
     </div>
     <div class="dl-body" id="dlQueueList">
@@ -278,14 +284,14 @@
     <p class="modal-text">
       ארכיון מסמכים מתקדם המחובר למסד נתונים סטאטי לקבלת ביצועים מקסימליים.<br><br>
       <span style="font-size: 0.9rem; opacity: 0.8; display: block; line-height: 1.4;">
-        * מובהר בזאת כי איננו יודעים את המקור של כל הקבצים המוצגים בארכיון. אנו מזמינים את הבעלים להגיש תביעת בעלות או בקשת הסרה במקרה הצורך, ומתנצלים מראש על כך.
+        <i class="fa-solid fa-asterisk"></i> מובהר בזאת כי איננו יודעים את המקור של כל הקבצים המוצגים בארכיון. אנו מזמינים את הבעלים להגיש תביעת בעלות או בקשת הסרה במקרה הצורך, ומתנצלים מראש על כך.
       </span>
     </p>
     <a href="#" class="primary-btn" id="requestAccessAboutBtn" style="text-decoration:none; width:100%;"><i class="fa-solid fa-envelope"></i> פניה למנהל</a>
   </div>
 </div>
 
-<!-- באנר צדדי שמחליף את חלון ההתחברות הראשי -->
+<!-- באנר צדדי הצעת התחברות -->
 <div id="delayedAuthBanner">
   <button class="modal-close" id="closeDelayedAuthBtn" style="position:absolute; top:10px; left:10px; background:none; border:none; cursor:pointer; font-size:1.1rem; color:var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
   <div class="banner-title"><i class="fa-solid fa-user-clock" style="color:var(--primary);"></i> התחברות לארכיון</div>
@@ -293,6 +299,17 @@
   <div style="display: flex; flex-direction: column; gap: 8px;">
     <button id="delayedAuthLoginBtn" class="primary-btn" style="padding: 8px 16px; font-size: 0.9rem;"><i class="fa-brands fa-google"></i> התחבר לחשבון גוגל</button>
     <a href="#" class="secondary-btn" id="delayedRequestAccessBtn" style="text-decoration:none; padding: 8px 16px; font-size: 0.9rem; margin-top:0; text-align:center;"><i class="fa-solid fa-envelope"></i> אין לך גישה? לחץ לפנייה</a>
+  </div>
+</div>
+
+<!-- באנר המלצה לשיתוף קבצים -->
+<div id="uploadOfferBanner" class="overlay">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('uploadOfferBanner').classList.remove('visible')" style="position:absolute; top:15px; right:15px; background:none; border:none; cursor:pointer; font-size:1.2rem; color:var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
+    <div class="modal-icon"><i class="fa-solid fa-share-nodes"></i></div>
+    <h1 class="modal-title">יש לכם קבצים מועילים?</h1>
+    <p class="modal-text">המאגר גדל בזכותכם! נשמח אם תשתפו קבצים משלכם לטובת כולם.<br>ניתן להעלות קבצים ישירות למאגר בלחיצת כפתור פשוטה.</p>
+    <button onclick="document.getElementById('uploadOfferBanner').classList.remove('visible'); document.getElementById('openUploadBtn').click();" class="primary-btn" style="width:100%;"><i class="fa-solid fa-cloud-arrow-up"></i> בואו נעלה קבצים</button>
   </div>
 </div>
 
@@ -411,7 +428,7 @@ const CONFIG = {
   CLIENT_ID: '877688936197-d2q7g35q7n4785hl90emknh8plnv7mrq.apps.googleusercontent.com', // החזר את ה-Client ID המלא שלך לכאן
   UPLOAD_URL: 'https://script.google.com/macros/s/AKfycbyeA5Ppa6a_jLwYh_FFtsp-IxzoTQFoJ7Z-aWKmWxcdD_8Ma2xQl9RU8eSnx885E-iFMQ/exec',
   PAGE_SIZE: 100,
-  ROOT_ID: '1FR9QRJ9moyu612adzeniO-vxFgM3Enl9' 
+  ROOT_ID: '1FR9QRJ9moyu612adzeniO-vxFgM3Enl9'
 };
 // ============================================================
 
@@ -463,7 +480,7 @@ function showToast(message, type = 'info') {
     const container = document.getElementById('toastContainer');
     const toast = document.createElement('div');
     toast.className = 'toast';
-    let icon = '<i class="fa-solid fa-circle-info" style="color:var(--primary)"></i>';
+    let icon = '<i class="fa-solid fa-circle-info fa-fade" style="color:var(--primary)"></i>';
     if(type === 'success') icon = '<i class="fa-solid fa-circle-check" style="color:#0F9D58"></i>';
     toast.innerHTML = `${icon} <span>${message}</span>`;
     container.appendChild(toast);
@@ -488,6 +505,7 @@ let state = {
 };
 
 let tokenClient;
+let isAuthenticating = false; 
 
 // ============================================================
 // מנהל הורדות (Download Manager)
@@ -513,19 +531,23 @@ function updateDownloadBadge() {
 function renderDownloadQueue() {
     const list = document.getElementById('dlQueueList');
     list.innerHTML = '';
+    
     if (downloadQueue.length === 0) {
         list.innerHTML = '<div style="text-align: center; color: var(--text-muted); margin-top: 40px; font-size: 0.9rem; font-weight: 500;">אין הורדות פעילות כרגע</div>';
         document.getElementById('dlProgressText').innerText = '0 מתוך 0';
+        document.getElementById('clearDlBtn').style.display = 'none';
         return;
     }
+
+    document.getElementById('clearDlBtn').style.display = 'inline-flex';
 
     downloadQueue.forEach(item => {
         let icon = '';
         let statusClass = '';
-        if (item.status === 'pending') { icon = '<i class="fa-solid fa-hourglass-half" style="color:var(--text-muted)"></i>'; }
+        if (item.status === 'pending') { icon = '<i class="fa-solid fa-hourglass-half fa-fade" style="color:var(--text-muted)"></i>'; }
         else if (item.status === 'downloading') { icon = '<i class="fa-solid fa-circle-notch fa-spin" style="color:var(--primary)"></i>'; statusClass = 'downloading'; }
-        else if (item.status === 'done') { icon = '<i class="fa-solid fa-check"></i>'; statusClass = 'done'; }
-        else if (item.status === 'cancelled') { icon = '<i class="fa-solid fa-xmark"></i>'; statusClass = 'cancelled'; }
+        else if (item.status === 'done') { icon = '<i class="fa-solid fa-check" style="color:#0F9D58"></i>'; statusClass = 'done'; }
+        else if (item.status === 'cancelled') { icon = '<i class="fa-solid fa-xmark" style="color:var(--danger)"></i>'; statusClass = 'cancelled'; }
 
         const safeName = escapeHtml(item.name.replace(/\.[^/.]+$/, ""));
 
@@ -564,6 +586,17 @@ function resumeDownloads() {
     updateDownloadBadge();
     showToast('ממשיך את ההורדות...', 'info');
     processDownloadQueue();
+}
+
+function clearDownloadQueue() {
+    downloadQueue = [];
+    isDownloading = false;
+    isDownloadCancelled = false;
+    renderDownloadQueue();
+    updateDownloadBadge();
+    document.getElementById('stopDlBtn').style.display = 'none';
+    document.getElementById('resumeDlBtn').style.display = 'none';
+    document.getElementById('clearDlBtn').style.display = 'none';
 }
 
 async function processDownloadQueue() {
@@ -619,16 +652,36 @@ async function processDownloadQueue() {
     isDownloading = false;
     updateDownloadBadge();
 
+    const hasCancelled = downloadQueue.some(q => q.status === 'cancelled');
+    const hasPending = downloadQueue.some(q => q.status === 'pending');
+
     if (isDownloadCancelled) {
         showToast('תור ההורדות נעצר.', 'info');
         document.getElementById('stopDlBtn').style.display = 'none';
-        const hasPending = downloadQueue.some(q => q.status === 'cancelled' || q.status === 'pending');
-        if (hasPending) document.getElementById('resumeDlBtn').style.display = 'inline-flex';
+        if (hasCancelled || hasPending) document.getElementById('resumeDlBtn').style.display = 'inline-flex';
     } else {
-        showToast('כל הקבצים נשלחו להורדה!', 'success');
-        document.getElementById('stopDlBtn').style.display = 'none';
-        document.getElementById('resumeDlBtn').style.display = 'none';
+        if (hasCancelled) {
+            showToast('ההורדות הפעילות הסתיימו, אך ישנן הורדות מושהות בתור.', 'success');
+            document.getElementById('stopDlBtn').style.display = 'none';
+            document.getElementById('resumeDlBtn').style.display = 'inline-flex';
+        } else {
+            if(downloadQueue.length > 0) showToast('כל הקבצים נשלחו להורדה!', 'success');
+            document.getElementById('stopDlBtn').style.display = 'none';
+            document.getElementById('resumeDlBtn').style.display = 'none';
+        }
     }
+}
+
+// אנימציה חיה לכפתור ההורדה
+function animateDownloadBtn(btn, isFolder) {
+    if (!btn) return;
+    const originalIcon = isFolder ? 'fa-cloud-arrow-down' : 'fa-download';
+    btn.classList.add('dl-click-anim');
+    btn.innerHTML = '<i class="fa-solid fa-check fa-beat"></i>';
+    setTimeout(() => {
+        btn.classList.remove('dl-click-anim');
+        btn.innerHTML = `<i class="fa-solid ${originalIcon}"></i>`;
+    }, 1500);
 }
 
 function getAllFilesInFolder(folderId) {
@@ -649,14 +702,15 @@ function getAllFilesInFolder(folderId) {
     return files;
 }
 
-function startFolderDownload(folderId, folderName) {
+function startFolderDownload(folderId, folderName, btnElement) {
+    animateDownloadBtn(btnElement, true);
+    
     if (isDownloading) {
         showToast('הורדה אחרת כבר פעילה. פותח את מנהל ההורדות...', 'info');
         openDownloadPanel();
-        return;
+    } else {
+        showToast(`סורק קבצים להורדה בתוך ${folderName}...`, 'info');
     }
-
-    showToast(`סורק קבצים להורדה בתוך ${folderName}...`, 'info');
     
     setTimeout(async () => {
         const filesToDownload = getAllFilesInFolder(folderId);
@@ -665,19 +719,25 @@ function startFolderDownload(folderId, folderName) {
             return;
         }
 
-        downloadQueue = filesToDownload.map(f => ({ id: f.id, name: f.name, status: 'pending' }));
-        isDownloadCancelled = false;
+        filesToDownload.forEach(f => {
+            downloadQueue.push({ id: f.id, name: f.name, status: 'pending' });
+        });
         
         openDownloadPanel();
         updateDownloadBadge();
         renderDownloadQueue();
-        showToast(`מתחיל בהורדת ${filesToDownload.length} קבצים...`, 'success');
+        showToast(`נוספו ${filesToDownload.length} קבצים לתור.`, 'success');
 
-        await processDownloadQueue();
+        if (!isDownloading) {
+            isDownloadCancelled = false;
+            processDownloadQueue();
+        }
     }, 100);
 }
 
-function downloadSingleFile(fileId, fileName) {
+function downloadSingleFile(fileId, fileName, btnElement) {
+    animateDownloadBtn(btnElement, false);
+    
     downloadQueue.push({ id: fileId, name: fileName, status: 'pending' });
     updateDownloadBadge();
     renderDownloadQueue();
@@ -969,12 +1029,12 @@ function renderPage(isFirstPage = false) {
             `;
         }
 
-        // בניית כפתור ההורדה שעל הקלף
+        // כפתור ההורדה מקבל את this
         let downloadBtnHtml = '';
         if (isFolder) {
-            downloadBtnHtml = `<button class="card-action-btn" title="הורד את כל תוכן התיקייה" onclick="event.stopPropagation(); startFolderDownload('${targetId}', '${escapeHtml(item.name).replace(/'/g, "\\'")}')"><i class="fa-solid fa-cloud-arrow-down"></i></button>`;
+            downloadBtnHtml = `<button class="card-action-btn" title="הורד את כל תוכן התיקייה" onclick="event.stopPropagation(); startFolderDownload('${targetId}', '${escapeHtml(item.name).replace(/'/g, "\\'")}', this)"><i class="fa-solid fa-cloud-arrow-down"></i></button>`;
         } else {
-            downloadBtnHtml = `<button class="card-action-btn" title="הורד קובץ" onclick="event.stopPropagation(); downloadSingleFile('${targetId}', '${escapeHtml(item.name).replace(/'/g, "\\'")}')"><i class="fa-solid fa-download"></i></button>`;
+            downloadBtnHtml = `<button class="card-action-btn" title="הורד קובץ" onclick="event.stopPropagation(); downloadSingleFile('${targetId}', '${escapeHtml(item.name).replace(/'/g, "\\'")}', this)"><i class="fa-solid fa-download"></i></button>`;
         }
 
         card.innerHTML = `
@@ -1357,7 +1417,7 @@ executeUploadBtn.addEventListener('click', async () => {
         
         if (result.status === 'success') {
             uploadProgress.style.color = '#0F9D58';
-            uploadProgress.innerHTML = '<i class="fa-solid fa-circle-check"></i> הקובץ הועלה ונקלט בהצלחה!';
+            uploadProgress.innerHTML = '<i class="fa-solid fa-circle-check fa-beat"></i> הקובץ הועלה ונקלט בהצלחה!';
             setTimeout(() => {
                 uploadModal.classList.remove('visible');
             }, 3000);
@@ -1396,22 +1456,26 @@ window.onload = () => {
         document.getElementById('themeBtn').innerHTML = '<i class="fa-solid fa-sun"></i>';
     }
 
+    let isAuthenticating = false;
+
     tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: CONFIG.CLIENT_ID,
         scope: 'https://www.googleapis.com/auth/drive.readonly',
         callback: (res) => {
+            isAuthenticating = false;
             if (res.access_token) {
                 state.accessToken = res.access_token;
                 localStorage.setItem('gdrive_auth_active', 'true'); 
                 document.getElementById('userMenuWrap').classList.add('visible'); 
+                document.getElementById('delayedAuthBanner').classList.remove('visible');
                 
-                // אם היינו באמצע תהליך שדורש הרשאה (כמו חיפוש עמוק שנתקע)
                 if (state.isSearchMode && document.getElementById('searchInput').value.trim()) {
                     performDeepSearch();
                 }
             }
         },
         error_callback: (err) => {
+            isAuthenticating = false;
             localStorage.removeItem('gdrive_auth_active');
             document.getElementById('userMenuWrap').classList.remove('visible');
             document.getElementById('delayedAuthBanner').classList.add('visible');
@@ -1426,17 +1490,24 @@ window.onload = () => {
     }, { root: document.querySelector('main'), rootMargin: '200px' });
     observer.observe(loadMoreBtn);
 
-    initDatabase(); // מפעיל את האתר (הטעינה המהירה מהמטמון)
+    initDatabase(); 
 
     if (localStorage.getItem('gdrive_auth_active') === 'true') {
+        isAuthenticating = true;
         tokenClient.requestAccessToken({prompt: ''});
+    } else {
+        setTimeout(() => {
+            if (!state.accessToken && !isAuthenticating && !document.getElementById('loginOverlay').classList.contains('visible')) {
+                document.getElementById('delayedAuthBanner').classList.add('visible');
+            }
+        }, 1500);
     }
 
     setTimeout(() => {
-        if (!state.accessToken && !document.getElementById('loginOverlay').classList.contains('visible')) {
-            document.getElementById('delayedAuthBanner').classList.add('visible');
+        if (!document.getElementById('uploadModal').classList.contains('visible')) {
+            document.getElementById('uploadOfferBanner').classList.add('visible');
         }
-    }, 1500);
+    }, 120000); 
 };
 </script>
 </body>
