@@ -767,7 +767,38 @@ async function apiFetch(url) {
 }
 
 function applyDatabase(data) {
-    state.db = data.files || [];
+    // פירוק של קובץ המטריצה המכווץ בחזרה לאובייקטים
+    if (data.format === 'matrix') {
+        state.db = (data.files || []).map(row => {
+            let mime = row[2];
+            if (mime === 'f') mime = MIME_FOLDER;
+            else if (mime === 's') mime = 'application/vnd.google-apps.shortcut';
+
+            let targetMime = row[8];
+            if (targetMime === 'f') targetMime = MIME_FOLDER;
+
+            let obj = {
+                id: row[0],
+                name: row[1],
+                mimeType: mime,
+                size: row[3],
+                modifiedTime: row[4],
+                parents: row[5] ? [row[5]] : [],
+                thumbnailLink: row[6]
+            };
+
+            if (mime === 'application/vnd.google-apps.shortcut') {
+                obj.shortcutDetails = {
+                    targetId: row[7],
+                    targetMimeType: targetMime
+                };
+            }
+            return obj;
+        });
+    } else {
+        state.db = data.files || [];
+    }
+
     CONFIG.ROOT_ID = data.root_folder_id;
     buildFolderMap();
     if (state.stack.length === 0) {
@@ -802,8 +833,7 @@ function buildFolderMap() {
 }
 
 async function initDatabase() {
-    // מוחק גרסאות שבורות וישנות של המטמון כדי שההורדה החדשה תיקלט בצורה חלקה
-    const dbName = "ArchiveCacheV3";
+    const dbName = "ArchiveCacheV5"; // גרסת מטמון חדשה לטובת פורמט המטריצה
     
     if ('caches' in window) {
         caches.keys().then(names => {
@@ -846,12 +876,12 @@ async function initDatabase() {
                     applyDatabase(data);
                     document.getElementById('startupLoader').style.display = 'none';
                 } else if (newLength !== oldLength && oldLength > 0) {
-                    state.db = data.files || [];
-                    buildFolderMap();
+                    state.db = []; // ניקוי הזיכרון
+                    applyDatabase(data); // בנייה מחדש
                     showToast('הארכיון סונכרן ברקע. רענן את הדף או פתח תיקייה כדי לראות קבצים חדשים.', 'success');
                 } else {
-                    state.db = data.files || [];
-                    buildFolderMap();
+                    state.db = [];
+                    applyDatabase(data);
                 }
             } else {
                 throw new Error("שגיאת רשת בטעינת הארכיון: " + res.status);
@@ -859,7 +889,6 @@ async function initDatabase() {
         }).catch(e => {
             console.warn('Background sync failed:', e);
             if (!loadedFromCache) {
-                // עצירה חכמה של הגלגל המסתובב והצגת מסך שגיאה אלגנטי למשתמש
                 document.getElementById('startupLoader').innerHTML = `
                   <i class="fa-solid fa-triangle-exclamation" style="color:var(--danger)"></i>
                   <span style="color:var(--text); margin-top: 16px; font-weight: bold; font-size: 1.2rem;">אופס! נראה שיש בעיה בחיבור</span>
