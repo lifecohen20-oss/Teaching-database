@@ -111,8 +111,15 @@
     .tree-item .tree-icon { flex-shrink: 0; font-size: 1rem; color: var(--folder); }
     
     main { flex: 1; padding: 24px; overflow-y: auto; min-width: 0; background: var(--bg); transition: background-color 0.4s ease; }
-    .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-    .sort-select { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 6px 32px 6px 12px; border-radius: var(--radius-sm); font-size: 0.85rem; cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: left 8px center; background-size: 14px; }
+    
+    /* ===== TOOLBAR (Updated) ===== */
+    .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+    .toolbar-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .sort-select, .filter-select { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 6px 32px 6px 12px; border-radius: var(--radius-sm); font-size: 0.85rem; cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: left 8px center; background-size: 14px; }
+    .view-toggle-group { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; height: 32px; }
+    .view-btn { background: transparent; border: none; padding: 0 14px; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+    .view-btn.active { background: var(--primary-light); color: var(--primary); }
+    .view-btn:hover:not(.active) { background: var(--surface2); color: var(--text); }
     
     /* ===== FILE GRID/LIST ===== */
     #fileContainer.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
@@ -175,7 +182,6 @@
     #fileContainer.list .card-action-btn { position: relative; top: auto; left: auto; opacity: 1; transform: scale(1); box-shadow: none; background: transparent; border-color: transparent; width: auto; height: auto; padding: 8px; }
     #fileContainer.list .card-action-btn:hover { background: var(--primary-light); color: var(--primary); border-radius: var(--radius-sm); }
     
-    /* אנימציית קליק להורדה */
     .dl-click-anim { animation: popClick 0.4s ease !important; background: var(--primary) !important; color: #fff !important; border-color: var(--primary) !important; }
     @keyframes popClick { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
@@ -235,7 +241,6 @@
 
 <div id="toastContainer"></div>
 
-<!-- פאנל מנהל הורדות -->
 <div id="downloadPanel">
     <div class="dl-header">
         <div class="dl-title">
@@ -260,7 +265,6 @@
     </div>
 </div>
 
-<!-- מסך התחברות גדול - מופיע רק כשהמשתמש מבקש פעולה אקטיבית כמו חיפוש עמוק -->
 <div id="loginOverlay" class="overlay">
   <div class="modal-box">
     <button class="modal-close" id="closeLoginOverlayBtn" style="position:absolute; top:15px; right:15px; background:none; border:none; cursor:pointer; font-size:1.2rem; color:var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
@@ -291,7 +295,6 @@
   </div>
 </div>
 
-<!-- באנר צדדי הצעת התחברות -->
 <div id="delayedAuthBanner">
   <button class="modal-close" id="closeDelayedAuthBtn" style="position:absolute; top:10px; left:10px; background:none; border:none; cursor:pointer; font-size:1.1rem; color:var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
   <div class="banner-title"><i class="fa-solid fa-user-clock" style="color:var(--primary);"></i> התחברות לארכיון</div>
@@ -302,7 +305,6 @@
   </div>
 </div>
 
-<!-- באנר המלצה לשיתוף קבצים -->
 <div id="uploadOfferBanner" class="overlay">
   <div class="modal-box">
     <button class="modal-close" onclick="document.getElementById('uploadOfferBanner').classList.remove('visible')" style="position:absolute; top:15px; right:15px; background:none; border:none; cursor:pointer; font-size:1.2rem; color:var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
@@ -313,7 +315,6 @@
   </div>
 </div>
 
-<!-- חלון העלאת קבצים -->
 <div id="uploadModal" class="overlay">
   <div class="modal-box">
     <button class="modal-close" id="closeUploadBtn" style="position:absolute; top:15px; right:15px; background:none; border:none; cursor:pointer; font-size:1.2rem; color:var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
@@ -364,7 +365,7 @@
   </a>
   <div class="search-wrap">
     <div class="search-inner">
-      <input type="text" id="searchInput" placeholder="חיפוש לפי שם בכל הארכיון..." />
+      <input type="text" id="searchInput" placeholder="חיפוש חכם בכל הארכיון..." />
       <span class="search-icon-left"><i class="fa-solid fa-magnifying-glass"></i></span>
       <button class="deep-search-btn" id="deepSearchBtn" title="חיפוש בתוכן הקבצים בכל הארכיון"><i class="fa-solid fa-file-waveform"></i> חיפוש עמוק</button>
       <button class="search-clear" id="searchClear"><i class="fa-solid fa-xmark"></i></button>
@@ -385,7 +386,6 @@
     <button class="icon-btn" id="openUploadBtn" title="העלאת קובץ"><i class="fa-solid fa-cloud-arrow-up"></i></button>
     <button class="icon-btn" id="aboutBtn" title="אודות"><i class="fa-solid fa-circle-info"></i></button>
     <button class="icon-btn" id="themeBtn" title="החלף עיצוב"><i class="fa-solid fa-moon"></i></button>
-    <button class="icon-btn" id="viewToggleBtn" title="תצוגת רשימה"><i class="fa-solid fa-list-ul"></i></button>
   </div>
 </header>
 
@@ -402,10 +402,26 @@
   </aside>
   <main>
     <div class="toolbar">
-      <select class="sort-select" id="sortSelect">
-        <option value="folder,name">שם (א-ת)</option>
-        <option value="modifiedTime desc">תאריך שינוי</option>
-      </select>
+      <div class="toolbar-left">
+          <select class="sort-select" id="sortSelect">
+            <option value="folder,name">שם (א-ת)</option>
+            <option value="modifiedTime desc">תאריך שינוי</option>
+          </select>
+          
+          <select class="filter-select" id="filterSelect" title="סינון לפי סוג קובץ">
+            <option value="all">כל הקבצים</option>
+            <option value="folders">תיקיות בלבד</option>
+            <option value="docs">מסמכים (PDF/Word)</option>
+            <option value="images">תמונות</option>
+            <option value="media">שמע ווידאו</option>
+            <option value="archives">קובצי כיווץ (ZIP)</option>
+          </select>
+          
+          <div class="view-toggle-group">
+            <button class="view-btn active" id="viewGridBtn" title="תצוגת רשת"><i class="fa-solid fa-grip"></i></button>
+            <button class="view-btn" id="viewListBtn" title="תצוגת רשימה"><i class="fa-solid fa-list-ul"></i></button>
+          </div>
+      </div>
       <div id="itemCount" class="item-count"></div>
     </div>
     
@@ -425,10 +441,10 @@
 const CONFIG = {
   DB_URL: 'https://raw.githubusercontent.com/lifecohen20-oss/Teaching-database/main/database.json',
   ADMIN_EMAIL: 'lifecohen20@gmail.com',
-  CLIENT_ID: '877688936197-d2q7g35q7n4785hl90emknh8plnv7mrq.apps.googleusercontent.com', // החזר את ה-Client ID המלא שלך לכאן
+  CLIENT_ID: '10199****931-b5nddn0m0i1*************s7t7q46v.apps.googleusercontent.com', 
   UPLOAD_URL: 'https://script.google.com/macros/s/AKfycbyeA5Ppa6a_jLwYh_FFtsp-IxzoTQFoJ7Z-aWKmWxcdD_8Ma2xQl9RU8eSnx885E-iFMQ/exec',
   PAGE_SIZE: 100,
-  ROOT_ID: '1FR9QRJ9moyu612adzeniO-vxFgM3Enl9'
+  ROOT_ID: '' 
 };
 // ============================================================
 
@@ -494,12 +510,14 @@ function showToast(message, type = 'info') {
 
 let state = {
   db: [], 
-  currentList: [], 
+  contextItems: [], // מכיל את כל הפריטים בתיקייה או בחיפוש לפני סינון
+  currentList: [],  // הפריטים המוצגים בפועל לאחר מיון וסינון
   stack: [], 
   currentPage: 0,
   isSearchMode: false,
   view: 'grid',
   sort: 'folder,name',
+  filter: 'all', // מצב הסינון הנוכחי
   accessToken: null,
   folderMap: {} 
 };
@@ -508,7 +526,7 @@ let tokenClient;
 let isAuthenticating = false; 
 
 // ============================================================
-// מנהל הורדות (Download Manager)
+// מנהל הורדות
 // ============================================================
 let downloadQueue = [];
 let isDownloading = false;
@@ -672,7 +690,6 @@ async function processDownloadQueue() {
     }
 }
 
-// אנימציה חיה לכפתור ההורדה
 function animateDownloadBtn(btn, isFolder) {
     if (!btn) return;
     const originalIcon = isFolder ? 'fa-cloud-arrow-down' : 'fa-download';
@@ -704,7 +721,6 @@ function getAllFilesInFolder(folderId) {
 
 function startFolderDownload(folderId, folderName, btnElement) {
     animateDownloadBtn(btnElement, true);
-    
     if (isDownloading) {
         showToast('הורדה אחרת כבר פעילה. פותח את מנהל ההורדות...', 'info');
         openDownloadPanel();
@@ -737,7 +753,6 @@ function startFolderDownload(folderId, folderName, btnElement) {
 
 function downloadSingleFile(fileId, fileName, btnElement) {
     animateDownloadBtn(btnElement, false);
-    
     downloadQueue.push({ id: fileId, name: fileName, status: 'pending' });
     updateDownloadBadge();
     renderDownloadQueue();
@@ -767,7 +782,6 @@ async function apiFetch(url) {
 }
 
 function applyDatabase(data) {
-    // פירוק של קובץ המטריצה המכווץ בחזרה לאובייקטים
     if (data.format === 'matrix') {
         state.db = (data.files || []).map(row => {
             let mime = row[2];
@@ -833,7 +847,7 @@ function buildFolderMap() {
 }
 
 async function initDatabase() {
-    const dbName = "ArchiveCacheV5"; // גרסת מטמון חדשה לטובת פורמט המטריצה
+    const dbName = "ArchiveCacheV6"; // התקדמנו ל-V6 בגלל העדכונים
     
     if ('caches' in window) {
         caches.keys().then(names => {
@@ -876,8 +890,8 @@ async function initDatabase() {
                     applyDatabase(data);
                     document.getElementById('startupLoader').style.display = 'none';
                 } else if (newLength !== oldLength && oldLength > 0) {
-                    state.db = []; // ניקוי הזיכרון
-                    applyDatabase(data); // בנייה מחדש
+                    state.db = []; 
+                    applyDatabase(data); 
                     showToast('הארכיון סונכרן ברקע. רענן את הדף או פתח תיקייה כדי לראות קבצים חדשים.', 'success');
                 } else {
                     state.db = [];
@@ -926,6 +940,38 @@ function sortItems(items) {
     return items;
 }
 
+// מפעיל את מנגנון המיון והסינון יחד
+function applyFiltersAndSort() {
+    let items = [...state.contextItems];
+    
+    // סינון לפי סוג קובץ
+    if (state.filter !== 'all') {
+        items = items.filter(f => {
+            let mime = f.mimeType;
+            if (mime === 'application/vnd.google-apps.shortcut' && f.shortcutDetails) {
+                mime = f.shortcutDetails.targetMimeType;
+            }
+            mime = mime.toLowerCase();
+            
+            switch(state.filter) {
+                case 'folders': return mime === MIME_FOLDER;
+                case 'docs': return mime.includes('pdf') || mime.includes('document') || mime.includes('word') || mime.includes('text');
+                case 'images': return mime.startsWith('image/');
+                case 'media': return mime.startsWith('video/') || mime.startsWith('audio/');
+                case 'archives': return mime.includes('zip') || mime.includes('rar') || mime.includes('tar') || mime.includes('compressed');
+                default: return true;
+            }
+        });
+    }
+    
+    items = sortItems(items);
+    state.currentList = items;
+    state.currentPage = 0;
+    
+    document.getElementById('fileContainer').innerHTML = '';
+    renderPage(true);
+}
+
 function loadFolder(folderId) {
     if (!folderId) return; 
     
@@ -934,15 +980,11 @@ function loadFolder(folderId) {
     document.getElementById('searchClear').classList.remove('visible');
     document.getElementById('deepSearchBtn').classList.remove('visible');
     
-    let items = state.db.filter(f => f.parents && f.parents.includes(folderId));
-    items = sortItems(items);
+    // מגדיר את ההקשר הנוכחי ולאחר מכן ממיין ומסנן אותו
+    state.contextItems = state.db.filter(f => f.parents && f.parents.includes(folderId));
     
-    state.currentList = items;
-    state.currentPage = 0;
-    
-    document.getElementById('fileContainer').innerHTML = '';
-    updateSidebarFolders(items);
-    renderPage(true);
+    updateSidebarFolders(state.contextItems);
+    applyFiltersAndSort();
 }
 
 function searchFiles(query) {
@@ -957,15 +999,17 @@ function searchFiles(query) {
     
     state.isSearchMode = true;
     renderBreadcrumb(); 
+    
+    // חיפוש חכם (Smart Search) - מפרק למילים ומחפש ללא תלות בסדר שלהן
     const q = query.toLowerCase();
+    const searchTerms = q.split(' ').filter(t => t.length > 0);
     
-    let items = state.db.filter(f => f.name.toLowerCase().includes(q));
-    items = sortItems(items);
-    state.currentList = items;
-    state.currentPage = 0;
+    state.contextItems = state.db.filter(f => {
+        const name = f.name.toLowerCase();
+        return searchTerms.every(term => name.includes(term));
+    });
     
-    document.getElementById('fileContainer').innerHTML = '';
-    renderPage(true);
+    applyFiltersAndSort();
 }
 
 async function performDeepSearch() {
@@ -983,21 +1027,21 @@ async function performDeepSearch() {
     document.getElementById('loadMoreBtn').style.display = 'none';
 
     try {
-        const q = encodeURIComponent(`fullText contains '${query.replace(/'/g,"\\'")}' and trashed = false`);
-        const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id)&pageSize=100`;
+        // חיפוש חכם עמוק מול שרתי גוגל (מחפש את כל המילים גם בנפרד)
+        const searchTerms = query.replace(/'/g,"\\'").split(' ').filter(t => t.length > 0);
+        const qParts = searchTerms.map(t => `fullText contains '${t}'`);
+        const builtQuery = `(${qParts.join(' and ')}) and trashed = false`;
+        
+        const url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(builtQuery)}&fields=files(id)&pageSize=100`;
         
         const data = await apiFetch(url);
         const foundIds = (data.files || []).map(f => f.id);
 
-        let items = state.db.filter(f => foundIds.includes(f.id));
-        state.currentList = sortItems(items);
-        state.currentPage = 0;
+        state.contextItems = state.db.filter(f => foundIds.includes(f.id));
+        applyFiltersAndSort();
         
-        document.getElementById('fileContainer').innerHTML = '';
-        renderPage(true);
-        
-        if (items.length > 0) {
-            document.getElementById('itemCount').textContent = `נמצאו ${items.length} תוצאות בחיפוש עמוק`;
+        if (state.currentList.length > 0) {
+            document.getElementById('itemCount').textContent = `נמצאו ${state.currentList.length} תוצאות בחיפוש עמוק`;
         }
     } catch (e) {
         if (e.message !== 'AUTH_REQUIRED') {
@@ -1037,7 +1081,7 @@ function renderPage(isFirstPage = false) {
     const pageItems = state.currentList.slice(start, end);
     
     if (isFirstPage && state.currentList.length === 0) {
-        container.innerHTML = '<div class="state-box"><i class="fa-regular fa-folder-open" style="font-size:3rem;margin-bottom:15px;color:var(--border);"></i><br>התיקייה ריקה או שלא נמצאו תוצאות</div>';
+        container.innerHTML = '<div class="state-box"><i class="fa-regular fa-folder-open" style="font-size:3rem;margin-bottom:15px;color:var(--border);"></i><br>לא נמצאו תוצאות התואמות לסינון זה</div>';
         document.getElementById('itemCount').textContent = '0 פריטים';
         document.getElementById('loadMoreBtn').style.display = 'none';
         return;
@@ -1303,11 +1347,12 @@ document.getElementById('deepSearchBtn').addEventListener('click', () => {
 
 document.getElementById('sortSelect').addEventListener('change', (e) => {
     state.sort = e.target.value; 
-    if (state.isSearchMode) {
-        searchFiles(document.getElementById('searchInput').value);
-    } else {
-        loadFolder(state.stack[state.stack.length-1].id); 
-    }
+    applyFiltersAndSort();
+});
+
+document.getElementById('filterSelect').addEventListener('change', (e) => {
+    state.filter = e.target.value; 
+    applyFiltersAndSort();
 });
 
 document.getElementById('themeBtn').addEventListener('click', () => {
@@ -1317,20 +1362,21 @@ document.getElementById('themeBtn').addEventListener('click', () => {
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
 });
 
-const viewToggleBtn = document.getElementById('viewToggleBtn');
-viewToggleBtn.addEventListener('click', () => {
-    const fileContainer = document.getElementById('fileContainer');
-    if (state.view === 'grid') {
-        state.view = 'list'; 
-        fileContainer.className = 'list'; 
-        viewToggleBtn.innerHTML = '<i class="fa-solid fa-grip"></i>';
-        viewToggleBtn.title = 'תצוגת רשת';
-    } else {
-        state.view = 'grid'; 
-        fileContainer.className = 'grid'; 
-        viewToggleBtn.innerHTML = '<i class="fa-solid fa-list-ul"></i>';
-        viewToggleBtn.title = 'תצוגת רשימה';
-    }
+// כפתורי החלפת תצוגה בסייר
+document.getElementById('viewGridBtn').addEventListener('click', () => {
+    state.view = 'grid';
+    document.getElementById('fileContainer').className = 'grid';
+    document.getElementById('viewGridBtn').classList.add('active');
+    document.getElementById('viewListBtn').classList.remove('active');
+    localStorage.setItem('viewMode', 'grid');
+});
+
+document.getElementById('viewListBtn').addEventListener('click', () => {
+    state.view = 'list';
+    document.getElementById('fileContainer').className = 'list';
+    document.getElementById('viewListBtn').classList.add('active');
+    document.getElementById('viewGridBtn').classList.remove('active');
+    localStorage.setItem('viewMode', 'list');
 });
 
 document.getElementById('aboutBtn').addEventListener('click', () => {
@@ -1511,6 +1557,11 @@ window.onload = () => {
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-theme');
         document.getElementById('themeBtn').innerHTML = '<i class="fa-solid fa-sun"></i>';
+    }
+    
+    const savedView = localStorage.getItem('viewMode');
+    if (savedView === 'list') {
+        document.getElementById('viewListBtn').click();
     }
 
     let isAuthenticating = false;
