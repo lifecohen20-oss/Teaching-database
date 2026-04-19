@@ -200,6 +200,18 @@
   </div>
 </div>
 
+<!-- חלון הצעת התחברות אוטומטי (קופץ אחרי 10 שניות) -->
+<div id="delayedAuthModal" class="overlay">
+  <div class="modal-box">
+    <button class="modal-close" id="closeDelayedAuthBtn" style="position:absolute; top:15px; right:15px; background:none; border:none; cursor:pointer; font-size:1.2rem; color:var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
+    <div class="modal-icon"><i class="fa-solid fa-user-clock"></i></div>
+    <h1 class="modal-title">הצגת תוכן הקבצים</h1>
+    <p class="modal-text">נראה שאינך מחובר למערכת.<br>אם הנך רשום כבר לקבוצה שלנו, מומלץ להתחבר כעת. אם עדיין אינך רשום, אנא פנה אלינו קודם כדי להירשם ולקבל גישה.</p>
+    <button id="delayedAuthLoginBtn" class="primary-btn" style="width:100%; margin-bottom: 12px;"><i class="fa-brands fa-google"></i> התחבר לחשבון מורשה</button>
+    <a href="#" class="secondary-btn" id="delayedRequestAccessBtn" style="display:block; text-decoration:none; width:100%; box-sizing: border-box;"><i class="fa-solid fa-envelope"></i> פנייה להרשמה לקבוצה</a>
+  </div>
+</div>
+
 <div id="previewModal" class="overlay">
   <div class="modal-box">
     <div class="preview-header">
@@ -208,9 +220,6 @@
         <a href="#" target="_blank" id="previewOpenTab" class="icon-btn" title="פתח בכרטיסייה חדשה" style="border:1px solid var(--border);"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
         <button class="icon-btn" id="closePreviewBtn" title="סגור" style="background:var(--danger-bg); color:var(--danger);"><i class="fa-solid fa-xmark"></i></button>
       </div>
-    </div>
-    <div style="background: var(--danger-bg); color: var(--danger); padding: 8px; font-size: 0.85rem;">
-      <i class="fa-solid fa-lock"></i> קבצי הארכיון מוגנים. אם התצוגה המקדימה חסומה, סימן שאינך מחובר בקבוצת המורשים של גוגל.
     </div>
     <iframe id="previewIframe" class="preview-iframe" allow="autoplay"></iframe>
   </div>
@@ -277,13 +286,12 @@
 // CONFIGURATION
 // ============================================================
 const CONFIG = {
-  API_KEY:     'AIzaSyDp7wMhHTOrydG8NS0MQlseIdMLOj4Qw4I',   // <-- החלף במפתח ה-API שלך
-  CLIENT_ID:   '877688936197-d2q7g35q7n4785hl90emknh8plnv7mrq.apps.googleusercontent.com', // <-- החלף ב-Client ID שלך
-  ROOT_ID:     '1FR9QRJ9moyu612adzeniO-vxFgM3Enl9',   // <-- החלף ב-ID של התיקייה שלך
-  PAGE_SIZE:   100,
-  ADMIN_EMAIL: 'lifecohen20@gmail.com'
+  DB_URL: 'https://raw.githubusercontent.com/lifecohen20-oss/Teaching-database/main/database.json',
+  ADMIN_EMAIL: 'lifecohen20@gmail.com',
+  CLIENT_ID: '877688936197-d2q7g35q7n4785hl90emknh8plnv7mrq.apps.googleusercontent.com', // החזר את ה-Client ID המלא שלך לכאן
+  PAGE_SIZE: 100,
+  ROOT_ID: '1FR9QRJ9moyu612adzeniO-vxFgM3Enl9' 
 };
-
 // ============================================================
 
 const MIME_FOLDER = 'application/vnd.google-apps.folder';
@@ -398,6 +406,8 @@ function sortItems(items) {
 }
 
 function loadFolder(folderId) {
+    if (!folderId) return; // הגנה: עצור אם אין מזהה תיקייה
+    
     state.isSearchMode = false;
     document.getElementById('searchInput').value = '';
     document.getElementById('searchClear').classList.remove('visible');
@@ -415,6 +425,8 @@ function loadFolder(folderId) {
 }
 
 function searchFiles(query) {
+    if (state.stack.length === 0) return; // הגנה: עצור אם מסד הנתונים טרם נטען או נכשל
+    
     if (!query) {
         loadFolder(state.stack[state.stack.length-1].id);
         return;
@@ -725,6 +737,16 @@ document.getElementById('closeAboutBtn').addEventListener('click', () => {
     document.getElementById('aboutModal').classList.remove('visible');
 });
 
+// פונקציות חלון הצעת התחברות אוטומטי (10 שניות)
+document.getElementById('closeDelayedAuthBtn').addEventListener('click', () => {
+    document.getElementById('delayedAuthModal').classList.remove('visible');
+});
+
+document.getElementById('delayedAuthLoginBtn').addEventListener('click', () => {
+    document.getElementById('delayedAuthModal').classList.remove('visible');
+    tokenClient.requestAccessToken({prompt: 'select_account'});
+});
+
 // פונקציות פרופיל משתמש
 const userProfileBtn = document.getElementById('userProfileBtn');
 const userDropdown = document.getElementById('userDropdown');
@@ -764,6 +786,7 @@ document.getElementById('skipAuthBtn').addEventListener('click', () => {
 window.onload = () => {
     const mailto = `mailto:${CONFIG.ADMIN_EMAIL}?subject=${encodeURIComponent("בקשת גישה לארכיון")}`;
     document.getElementById('requestAccessAboutBtn').href = mailto;
+    document.getElementById('delayedRequestAccessBtn').href = mailto;
 
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
@@ -805,6 +828,14 @@ window.onload = () => {
         document.getElementById('startupLoader').style.display = 'none';
         document.getElementById('loginOverlay').classList.add('visible');
     }
+
+    // הפעלת הבדיקה האוטומטית לאחר 10 שניות (10,000 מילישניות)
+    setTimeout(() => {
+        // בודק אם המשתמש לא מחובר וגם לא נמצא כרגע מול מסך החסימה הראשי
+        if (!state.accessToken && !document.getElementById('loginOverlay').classList.contains('visible')) {
+            document.getElementById('delayedAuthModal').classList.add('visible');
+        }
+    }, 10000);
 };
 </script>
 </body>
