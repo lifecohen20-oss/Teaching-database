@@ -84,7 +84,6 @@
     .icon-btn { width: 40px; height: 40px; background: transparent; border: none; color: var(--text-muted); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; transition: background 0.2s; }
     .icon-btn:hover { background: var(--surface2); color: var(--text); }
     
-    /* תפריט משתמש גוגל */
     .user-menu-wrap { position: relative; display: none; }
     .user-menu-wrap.visible { display: block; }
     .user-dropdown { position: absolute; top: 110%; left: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-card); display: none; min-width: 160px; z-index: 300; flex-direction: column; overflow: hidden; animation: fadeInUp 0.2s ease; }
@@ -97,11 +96,10 @@
     .crumb { cursor: pointer; color: var(--text-muted); padding: 4px 8px; border-radius: var(--radius-sm); display: flex; align-items: center; gap: 6px; }
     .crumb:hover { background: var(--surface2); color: var(--text); }
     .crumb-sep { color: var(--border); font-size: 0.8rem; }
-    .crumb-current { color: var(--text); font-weight: 500; padding: 4px 8px; display: flex; align-items: center; gap: 6px; }
+    .crumb-current { color: var(--primary); font-weight: 600; padding: 4px 8px; display: flex; align-items: center; gap: 6px; background: var(--primary-light); border-radius: var(--radius-sm); }
     
     .app-body { display: flex; height: calc(100vh - 64px - 45px); position: relative; z-index: 1; }
     
-    /* סרגל צד וגרירה */
     #sidebar { width: 260px; min-width: 180px; max-width: 450px; flex-shrink: 0; background: var(--surface); border-left: 1px solid var(--border); padding: 16px 8px; overflow-y: auto; transition: background-color 0.4s ease; position: relative; }
     .sidebar-resizer { width: 5px; height: 100%; position: absolute; left: 0; top: 0; cursor: ew-resize; z-index: 10; transition: background 0.2s; }
     .sidebar-resizer:hover, .sidebar-resizer.active { background: var(--primary); opacity: 0.3; }
@@ -117,7 +115,7 @@
     .sort-select { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 6px 32px 6px 12px; border-radius: var(--radius-sm); font-size: 0.85rem; cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: left 8px center; background-size: 14px; }
     
     /* ===== FILE GRID/LIST ===== */
-    #fileContainer.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    #fileContainer.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
     #fileContainer.list { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
     
     .file-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; text-align: right; position: relative; animation: fadeInUp 0.3s ease forwards; opacity: 0; }
@@ -129,14 +127,26 @@
     #fileContainer.grid .file-card.folder-card .icon-wrap { background: transparent; color: var(--folder) !important; font-size: 5rem; }
     
     .file-card .name { font-size: 0.95rem; font-weight: 500; color: var(--text); line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; word-break: break-word; padding: 0 4px; }
-    .file-card .meta { font-size: 0.75rem; color: var(--text-muted); margin-top: auto; padding: 0 4px 4px 4px; }
+    .file-card .meta { font-size: 0.75rem; color: var(--text-muted); padding: 0 4px 4px 4px; }
     
-    #fileContainer.list .file-card { flex-direction: row; border: none; border-bottom: 1px solid var(--border); border-radius: 0; padding: 12px 20px; gap: 16px; align-items: center; }
+    #fileContainer.list .file-card { flex-direction: row; flex-wrap: wrap; border: none; border-bottom: 1px solid var(--border); border-radius: 0; padding: 12px 20px; gap: 16px; align-items: center; }
     #fileContainer.list .file-card .icon-wrap { width: 36px; height: 36px; border-radius: var(--radius-sm); font-size: 1.3rem; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--surface2); flex-shrink: 0; }
     #fileContainer.list .file-card .icon-wrap img { width: 100%; height: 100%; object-fit: cover; }
     #fileContainer.list .file-card.folder-card .icon-wrap { background: transparent; color: var(--folder) !important; }
     #fileContainer.list .file-card .name { -webkit-line-clamp: 1; line-clamp: 1; flex: 1; padding: 0; }
     #fileContainer.list .file-card .meta { margin-top: 0; width: 150px; text-align: left; padding: 0; }
+    
+    /* תוספות ייעודיות למצב חיפוש (נתיב וכפתור מיקום) */
+    .search-extra { width: 100%; margin-top: 8px; display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+    #fileContainer.grid .search-extra { flex-direction: column; align-items: stretch; margin-top: auto; border-top: 1px dashed var(--border); padding-top: 10px; }
+    #fileContainer.list .search-extra { flex-direction: row; align-items: center; padding-top: 12px; border-top: 1px dashed var(--border); }
+    
+    .search-path { flex: 1; font-size: 0.75rem; color: var(--text-muted); background: var(--surface2); padding: 6px 8px; border-radius: var(--radius-sm); line-height: 1.5; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    #fileContainer.list .search-path { background: transparent; padding: 0; -webkit-line-clamp: 1; font-size: 0.85rem; }
+    
+    .open-location-btn { background: var(--surface); color: var(--primary); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 12px; font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; }
+    .open-location-btn:hover { background: var(--primary-light); border-color: var(--primary); }
+    #fileContainer.list .open-location-btn { padding: 4px 10px; }
     
     .state-box { grid-column: 1 / -1; text-align: center; padding: 100px 20px; color: var(--text-muted); font-size: 1.1rem;}
     #loadMoreBtn { display: none; margin: 32px auto; padding: 10px 24px; background: transparent; border: none; color: var(--primary); text-align: center; font-size: 1.1rem; }
@@ -155,6 +165,20 @@
     .preview-title { font-size: 1.1rem; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 10px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
     .preview-actions { display: flex; gap: 10px; }
     .preview-iframe { flex: 1; width: 100%; border: none; background: #fff; }
+    
+    /* ===== עיצוב אזור העלאת הקבצים ===== */
+    .upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 40px 20px; text-align: center; background: var(--surface2); cursor: pointer; transition: all 0.3s; margin-bottom: 16px; position: relative; overflow: hidden; }
+    .upload-zone:hover { background: var(--surface3); }
+    .upload-zone.dragover { background: var(--primary-light); border-color: var(--primary); }
+    .upload-zone i { font-size: 3.5rem; color: var(--primary); margin-bottom: 16px; pointer-events: none; }
+    .upload-zone p { margin: 0; color: var(--text-muted); font-size: 1rem; pointer-events: none; }
+    .upload-zone small { display: block; color: var(--text-dim); margin-top: 8px; font-size: 0.8rem; pointer-events: none; }
+    
+    .upload-file-info { display: none; background: var(--surface); padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 16px; text-align: right; }
+    .upload-file-info .filename { font-weight: 500; color: var(--text); display: block; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .upload-file-info .filesize { font-size: 0.85rem; color: var(--text-muted); }
+    
+    .upload-progress { display: none; align-items: center; justify-content: center; gap: 10px; color: var(--primary); font-weight: 500; margin-bottom: 16px; font-size: 1.1rem; }
     
     #startupLoader { position: fixed; inset: 0; background: var(--bg); z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--primary); }
     #startupLoader i { font-size: 3rem; margin-bottom: 16px; }
@@ -182,7 +206,7 @@
 
 <div id="startupLoader">
   <i class="fa-solid fa-circle-notch fa-spin"></i>
-  <span>מסנכרן מסד נתונים...</span>
+  <span id="loaderText">טוען ארכיון...</span>
 </div>
 
 <div id="aboutModal" class="overlay">
@@ -200,7 +224,6 @@
   </div>
 </div>
 
-<!-- חלון הצעת התחברות אוטומטי (קופץ אחרי 10 שניות) -->
 <div id="delayedAuthModal" class="overlay">
   <div class="modal-box">
     <button class="modal-close" id="closeDelayedAuthBtn" style="position:absolute; top:15px; right:15px; background:none; border:none; cursor:pointer; font-size:1.2rem; color:var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
@@ -208,7 +231,42 @@
     <h1 class="modal-title">הצגת תוכן הקבצים</h1>
     <p class="modal-text">נראה שאינך מחובר למערכת.<br>אם הנך רשום כבר לקבוצה שלנו, מומלץ להתחבר כעת. אם עדיין אינך רשום, אנא פנה אלינו קודם כדי להירשם ולקבל גישה.</p>
     <button id="delayedAuthLoginBtn" class="primary-btn" style="width:100%; margin-bottom: 12px;"><i class="fa-brands fa-google"></i> התחבר לחשבון מורשה</button>
-    <a href="#" class="secondary-btn" id="delayedRequestAccessBtn" style="display:block; text-decoration:none; width:100%; box-sizing: border-box;"><i class="fa-solid fa-envelope"></i> פנייה להרשמה לקבוצה</a>
+    <a href="#" class="secondary-btn" id="delayedRequestAccessBtn" style="display:block; text-decoration:none; width:100%; box-sizing: border-box; background: transparent; color: var(--primary); border: 1px solid var(--border); padding: 12px; border-radius: 4px;"><i class="fa-solid fa-envelope"></i> פנייה להרשמה לקבוצה</a>
+  </div>
+</div>
+
+<!-- חלון העלאת קבצים -->
+<div id="uploadModal" class="overlay">
+  <div class="modal-box">
+    <button class="modal-close" id="closeUploadBtn" style="position:absolute; top:15px; right:15px; background:none; border:none; cursor:pointer; font-size:1.2rem; color:var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
+    <h1 class="modal-title" style="margin-bottom: 24px;">העלאת קובץ לארכיון</h1>
+    
+    <!-- אזור הגרירה -->
+    <div class="upload-zone" id="uploadZone">
+      <i class="fa-solid fa-cloud-arrow-up"></i>
+      <p>לחץ כאן לבחירת קובץ או גרור קובץ לכאן</p>
+      <small>(גודל מקסימלי מומלץ: 25MB)</small>
+    </div>
+    <input type="file" id="fileInput" style="display: none;" />
+    
+    <!-- מידע על הקובץ שנבחר -->
+    <div class="upload-file-info" id="uploadFileInfo">
+      <i class="fa-solid fa-file" style="color:var(--primary); font-size:1.5rem; float:right; margin-left:12px; margin-top:4px;"></i>
+      <span class="filename" id="uploadFileName">שם הקובץ יופיע כאן</span>
+      <span class="filesize" id="uploadFileSize"></span>
+    </div>
+    
+    <!-- מחוון התקדמות / טעינה -->
+    <div class="upload-progress" id="uploadProgress">
+      <i class="fa-solid fa-circle-notch fa-spin"></i> מעלה קובץ לשרת, אנא המתן...
+    </div>
+    
+    <button id="executeUploadBtn" class="primary-btn" style="width:100%; display:none; margin-bottom: 16px;"><i class="fa-solid fa-upload"></i> העלה קובץ לארכיון</button>
+    
+    <!-- הודעת גיבוי (Fallback) -->
+    <div style="margin-top: 16px; font-size: 0.85rem; color: var(--text-muted); text-align: right; background: var(--surface2); padding: 12px; border-radius: var(--radius-sm); border-right: 3px solid var(--primary);">
+        <i class="fa-solid fa-circle-info" style="color: var(--primary);"></i> <strong>לא מצליחים להעלות?</strong><br>ניתן לשלוח קבצים ישירות לכתובת המייל שלנו, או להעלות לדרייב שלכם ולשתף את הקישור עם המייל: <br><strong style="user-select: all;">lifecohen20@gmail.com</strong>
+    </div>
   </div>
 </div>
 
@@ -246,6 +304,8 @@
         <button class="user-dropdown-btn" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> התנתק מהחשבון</button>
       </div>
     </div>
+    <!-- כפתור העלאה חדש בסרגל העליון -->
+    <button class="icon-btn" id="openUploadBtn" title="העלאת קובץ"><i class="fa-solid fa-cloud-arrow-up"></i></button>
     <button class="icon-btn" id="aboutBtn" title="אודות"><i class="fa-solid fa-circle-info"></i></button>
     <button class="icon-btn" id="themeBtn" title="החלף עיצוב"><i class="fa-solid fa-moon"></i></button>
     <button class="icon-btn" id="viewToggleBtn" title="תצוגת רשימה"><i class="fa-solid fa-list-ul"></i></button>
@@ -289,8 +349,9 @@ const CONFIG = {
   DB_URL: 'https://raw.githubusercontent.com/lifecohen20-oss/Teaching-database/main/database.json',
   ADMIN_EMAIL: 'lifecohen20@gmail.com',
   CLIENT_ID: '877688936197-d2q7g35q7n4785hl90emknh8plnv7mrq.apps.googleusercontent.com', // החזר את ה-Client ID המלא שלך לכאן
+  UPLOAD_URL: 'https://script.google.com/macros/s/AKfycbyeA5Ppa6a_jLwYh_FFtsp-IxzoTQFoJ7Z-aWKmWxcdD_8Ma2xQl9RU8eSnx885E-iFMQ/exec',
   PAGE_SIZE: 100,
-  ROOT_ID: '1FR9QRJ9moyu612adzeniO-vxFgM3Enl9' 
+  ROOT_ID: '1FR9QRJ9moyu612adzeniO-vxFgM3Enl9'' 
 };
 // ============================================================
 
@@ -346,7 +407,8 @@ let state = {
   isSearchMode: false,
   view: 'grid',
   sort: 'folder,name',
-  accessToken: null
+  accessToken: null,
+  folderMap: {} // שומר מיפוי של תיקיות להצגת נתיבים מהירה
 };
 
 let tokenClient;
@@ -366,28 +428,85 @@ async function apiFetch(url) {
   return res.json();
 }
 
-async function initDatabase() {
-    try {
-        const res = await fetch(CONFIG.DB_URL, { cache: 'no-store' }); 
-        if (!res.ok) throw new Error('שגיאה בטעינת הנתונים מ-GitHub');
-        const data = await res.json();
-        
-        state.db = data.files || [];
-        CONFIG.ROOT_ID = data.root_folder_id;
+// פונקציה ליישום מסד הנתונים והפעלת הממשק
+function applyDatabase(data) {
+    state.db = data.files || [];
+    CONFIG.ROOT_ID = data.root_folder_id;
+    buildFolderMap();
+    if (state.stack.length === 0) {
         state.stack = [{ id: CONFIG.ROOT_ID, name: 'בית' }];
+    }
+    renderBreadcrumb();
+    renderRecentFolders();
+    if (!state.isSearchMode) loadFolder(CONFIG.ROOT_ID);
+}
+
+// בניית "מפת התיקיות" כדי שנוכל לשלוף נתיב של כל קובץ בשבריר שנייה
+function buildFolderMap() {
+    state.folderMap = {};
+    state.db.forEach(f => {
+        if (f.mimeType === MIME_FOLDER) {
+            state.folderMap[f.id] = {
+                name: f.name,
+                parentId: f.parents ? f.parents[0] : null
+            };
+        }
+    });
+    // מוודא שהתיקייה הראשית תמיד נקראת "בית"
+    if (CONFIG.ROOT_ID) {
+        if (state.folderMap[CONFIG.ROOT_ID]) {
+            state.folderMap[CONFIG.ROOT_ID].name = 'בית';
+        } else {
+            state.folderMap[CONFIG.ROOT_ID] = { name: 'בית', parentId: null };
+        }
+    }
+}
+
+// טעינת מסד הנתונים עם מנגנון מטמון (Cache) חכם למהירות שיא
+async function initDatabase() {
+    const dbName = "ArchiveCache";
+    try {
+        // 1. קודם כל - מנסים לטעון את הקובץ שנשמר במטמון מהביקור הקודם
+        if ('caches' in window) {
+            const cache = await caches.open(dbName);
+            const response = await cache.match(CONFIG.DB_URL);
+            if (response) {
+                const data = await response.json();
+                applyDatabase(data);
+                document.getElementById('startupLoader').style.display = 'none';
+            }
+        }
         
-        document.getElementById('startupLoader').style.display = 'none';
-        
-        renderBreadcrumb();
-        renderRecentFolders();
-        loadFolder(CONFIG.ROOT_ID);
-        
+        // 2. במקביל (ומבלי להפריע למשתמש שכבר רואה תוצאות), מורידים גרסה עדכנית ושומרים במטמון
+        fetch(CONFIG.DB_URL, { cache: 'no-store' }).then(async (res) => {
+            if (res.ok) {
+                const clone = res.clone();
+                if ('caches' in window) {
+                    const cache = await caches.open(dbName);
+                    cache.put(CONFIG.DB_URL, clone);
+                }
+                const data = await res.json();
+                
+                // אם זו כניסה ראשונה (לא נטען כלום מהמטמון), נציג כעת
+                if (state.db.length === 0) {
+                    applyDatabase(data);
+                    document.getElementById('startupLoader').style.display = 'none';
+                } else {
+                    // עדכון שקט מאחורי הקלעים לשאילתות הבאות
+                    state.db = data.files || [];
+                    buildFolderMap();
+                }
+            }
+        }).catch(e => console.warn('Background sync failed:', e));
+
     } catch (e) {
-        document.getElementById('startupLoader').innerHTML = `
-          <i class="fa-solid fa-triangle-exclamation" style="color:var(--danger)"></i>
-          <span style="color:var(--danger)">שגיאה: לא ניתן לטעון את מסד הנתונים.</span>
-          <small style="margin-top:10px;">${e.message}</small>
-        `;
+        if (state.db.length === 0) {
+            document.getElementById('startupLoader').innerHTML = `
+              <i class="fa-solid fa-triangle-exclamation" style="color:var(--danger)"></i>
+              <span style="color:var(--danger)">שגיאה: לא ניתן לטעון את מסד הנתונים.</span>
+              <small style="margin-top:10px;">${e.message}</small>
+            `;
+        }
     }
 }
 
@@ -406,7 +525,7 @@ function sortItems(items) {
 }
 
 function loadFolder(folderId) {
-    if (!folderId) return; // הגנה: עצור אם אין מזהה תיקייה
+    if (!folderId) return; 
     
     state.isSearchMode = false;
     document.getElementById('searchInput').value = '';
@@ -425,14 +544,17 @@ function loadFolder(folderId) {
 }
 
 function searchFiles(query) {
-    if (state.stack.length === 0) return; // הגנה: עצור אם מסד הנתונים טרם נטען או נכשל
+    if (state.stack.length === 0) return; 
     
     if (!query) {
+        state.isSearchMode = false;
+        renderBreadcrumb();
         loadFolder(state.stack[state.stack.length-1].id);
         return;
     }
     
     state.isSearchMode = true;
+    renderBreadcrumb(); // עדכון הניווט כך שהכפתור "בית" יהיה לחיץ בחיפוש
     const q = query.toLowerCase();
     
     let items = state.db.filter(f => f.name.toLowerCase().includes(q));
@@ -454,6 +576,7 @@ async function performDeepSearch() {
     }
 
     state.isSearchMode = true;
+    renderBreadcrumb();
     document.getElementById('fileContainer').innerHTML = '<div class="state-box"><i class="fa-solid fa-circle-notch fa-spin" style="font-size:2rem;color:var(--primary);margin-bottom:15px;"></i><br>מבצע חיפוש עמוק בתוך תוכן הקבצים בכל הארכיון...</div>';
     document.getElementById('loadMoreBtn').style.display = 'none';
 
@@ -481,6 +604,33 @@ async function performDeepSearch() {
     }
 }
 
+// פונקציה לפתיחת מיקום של קובץ מתוך תוצאות החיפוש
+window.openFolderFromSearch = function(folderId, folderName) {
+    let newStack = [];
+    let currId = folderId;
+    
+    // בונה את הנתיב אחורה עד לתיקיית השורש
+    while (currId && state.folderMap[currId]) {
+        newStack.unshift({ id: currId, name: state.folderMap[currId].name });
+        if (currId === CONFIG.ROOT_ID) break;
+        currId = state.folderMap[currId].parentId;
+    }
+    
+    // במקרה של תקלה בנתיב, מייצר נתיב בסיסי
+    if (newStack.length === 0 || newStack[0].id !== CONFIG.ROOT_ID) {
+        newStack = [{ id: CONFIG.ROOT_ID, name: 'בית' }, { id: folderId, name: folderName }];
+    }
+    
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchClear').classList.remove('visible');
+    document.getElementById('deepSearchBtn').classList.remove('visible');
+    
+    state.stack = newStack;
+    addToRecent(folderId, folderName);
+    renderBreadcrumb();
+    loadFolder(folderId);
+};
+
 function renderPage(isFirstPage = false) {
     const container = document.getElementById('fileContainer');
     const start = state.currentPage * CONFIG.PAGE_SIZE;
@@ -506,10 +656,38 @@ function renderPage(isFirstPage = false) {
             iconHtml = `<div class="icon-wrap"><img src="${hqThumbnail}" alt="תמונה ממוזערת" referrerpolicy="no-referrer" loading="lazy" /></div>`;
         }
 
+        // יצירת תצוגת הנתיב המלא למצב חיפוש בלבד
+        let searchExtraHtml = '';
+        if (state.isSearchMode && item.parents && item.parents.length > 0) {
+            const parentId = item.parents[0];
+            let pathNames = [];
+            let currId = parentId;
+            
+            while (currId && state.folderMap[currId]) {
+                pathNames.unshift(state.folderMap[currId].name);
+                if (currId === CONFIG.ROOT_ID) break;
+                currId = state.folderMap[currId].parentId;
+            }
+            if (pathNames.length === 0) pathNames = ['תיקייה'];
+            
+            const pathString = pathNames.join(' <i class="fa-solid fa-angle-left" style="font-size:0.75em; opacity:0.6; margin:0 4px;"></i> ');
+            const parentName = state.folderMap[parentId] ? state.folderMap[parentId].name : 'תיקייה';
+            
+            searchExtraHtml = `
+              <div class="search-extra">
+                <div class="search-path" title="נתיב: ${pathNames.join(' / ')}">${pathString}</div>
+                <button class="open-location-btn" onclick="event.stopPropagation(); window.openFolderFromSearch('${parentId}', '${escapeHtml(parentName)}')">
+                  <i class="fa-solid fa-folder-open"></i> פתח מיקום
+                </button>
+              </div>
+            `;
+        }
+
         card.innerHTML = `
           ${iconHtml}
           <div class="name">${escapeHtml(item.name)}</div>
           ${!item.size ? '' : `<div class="meta">${(item.size/1024).toFixed(1)} KB</div>`}
+          ${searchExtraHtml}
         `;
         
         card.addEventListener('click', () => {
@@ -536,11 +714,11 @@ function renderPage(isFirstPage = false) {
 // פונקציות היסטוריה (נפתחו לאחרונה) בסרגל צד
 // ============================================================
 function addToRecent(id, name) {
-    if (id === CONFIG.ROOT_ID) return; // לא שומרים את הבית
+    if (id === CONFIG.ROOT_ID) return; 
     let recents = JSON.parse(localStorage.getItem('recent_folders') || '[]');
-    recents = recents.filter(f => f.id !== id); // מסיר אם קיים כדי להקפיץ למעלה
-    recents.unshift({ id, name }); // מוסיף להתחלה
-    if (recents.length > 5) recents.pop(); // שומר מקסימום 5
+    recents = recents.filter(f => f.id !== id); 
+    recents.unshift({ id, name }); 
+    if (recents.length > 5) recents.pop(); 
     localStorage.setItem('recent_folders', JSON.stringify(recents));
     renderRecentFolders();
 }
@@ -560,7 +738,6 @@ function renderRecentFolders() {
         el.className = 'tree-item';
         el.innerHTML = `<span class="tree-icon" style="color:var(--primary);"><i class="fa-solid fa-clock-rotate-left" style="font-size:0.85rem;"></i></span> <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</span>`;
         el.addEventListener('click', () => {
-            // מאפס את הנתיב (Breadcrumb) כשקופצים מהיסטוריה
             state.stack = [{ id: CONFIG.ROOT_ID, name: 'בית' }];
             openFolder(f.id, f.name);
         });
@@ -597,27 +774,42 @@ function openFolder(id, name) {
 function renderBreadcrumb() {
   const b = document.getElementById('breadcrumb');
   b.innerHTML = '';
+  
   state.stack.forEach((s, i) => {
+    // במצב חיפוש, כל הפריטים בנתיב הופכים ללחיצים (כולל האחרון) כדי לצאת מהחיפוש
+    const isLast = (i === state.stack.length - 1) && !state.isSearchMode;
     const span = document.createElement('span');
-    span.className = i === state.stack.length - 1 ? 'crumb-current' : 'crumb';
-    span.innerHTML = (i === 0 ? '<i class="fa-solid fa-house"></i>' : '') + ' ' + s.name;
+    span.className = isLast ? 'crumb-current' : 'crumb';
+    span.innerHTML = (i === 0 ? '<i class="fa-solid fa-house"></i>' : '') + ' ' + escapeHtml(s.name);
     
-    if (i !== state.stack.length - 1) {
+    if (!isLast) {
         span.addEventListener('click', () => {
             state.stack = state.stack.slice(0, i + 1);
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchClear').classList.remove('visible');
+            document.getElementById('deepSearchBtn').classList.remove('visible');
+            state.isSearchMode = false;
             renderBreadcrumb();
             loadFolder(s.id);
         });
     }
     
     b.appendChild(span);
-    if (i < state.stack.length - 1) {
+    if (i < state.stack.length - 1 || state.isSearchMode) {
         const sep = document.createElement('span');
         sep.className = 'crumb-sep';
         sep.textContent = ' / ';
         b.appendChild(sep);
     }
   });
+
+  // אם אנחנו בחיפוש, נוסיף חיווי וירטואלי שמסביר למשתמש שהוא בתוצאות החיפוש
+  if (state.isSearchMode) {
+      const searchCrumb = document.createElement('span');
+      searchCrumb.className = 'crumb-current';
+      searchCrumb.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> תוצאות חיפוש';
+      b.appendChild(searchCrumb);
+  }
 }
 
 // ============================================================
@@ -635,7 +827,6 @@ resizer.addEventListener('mousedown', (e) => {
 
 document.addEventListener('mousemove', (e) => {
     if (!isResizing) return;
-    // באנגלית זה e.clientX, אבל באתר מימין לשמאל (RTL) אנו מחשבים את המרחק מהקצה השמאלי
     let newWidth = window.innerWidth - e.clientX;
     if (newWidth < 180) newWidth = 180;
     if (newWidth > 450) newWidth = 450;
@@ -737,7 +928,6 @@ document.getElementById('closeAboutBtn').addEventListener('click', () => {
     document.getElementById('aboutModal').classList.remove('visible');
 });
 
-// פונקציות חלון הצעת התחברות אוטומטי (10 שניות)
 document.getElementById('closeDelayedAuthBtn').addEventListener('click', () => {
     document.getElementById('delayedAuthModal').classList.remove('visible');
 });
@@ -747,7 +937,6 @@ document.getElementById('delayedAuthLoginBtn').addEventListener('click', () => {
     tokenClient.requestAccessToken({prompt: 'select_account'});
 });
 
-// פונקציות פרופיל משתמש
 const userProfileBtn = document.getElementById('userProfileBtn');
 const userDropdown = document.getElementById('userDropdown');
 
@@ -773,6 +962,134 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
     document.getElementById('userMenuWrap').classList.remove('visible');
     userDropdown.classList.remove('show');
 });
+
+// ============================================================
+// לוגיקת העלאת קבצים (Drag & Drop + Base64)
+// ============================================================
+let selectedFileForUpload = null;
+const uploadModal = document.getElementById('uploadModal');
+const uploadZone = document.getElementById('uploadZone');
+const fileInput = document.getElementById('fileInput');
+const uploadFileInfo = document.getElementById('uploadFileInfo');
+const uploadFileName = document.getElementById('uploadFileName');
+const uploadFileSize = document.getElementById('uploadFileSize');
+const uploadProgress = document.getElementById('uploadProgress');
+const executeUploadBtn = document.getElementById('executeUploadBtn');
+
+// פתיחה וסגירה של חלון ההעלאה
+document.getElementById('openUploadBtn').addEventListener('click', () => {
+    uploadModal.classList.add('visible');
+    resetUploadUI();
+});
+
+document.getElementById('closeUploadBtn').addEventListener('click', () => {
+    uploadModal.classList.remove('visible');
+});
+
+// התנהגות גרירה ובחירת קובץ
+uploadZone.addEventListener('click', () => fileInput.click());
+
+uploadZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadZone.classList.add('dragover');
+});
+
+uploadZone.addEventListener('dragleave', () => {
+    uploadZone.classList.remove('dragover');
+});
+
+uploadZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) {
+        handleFileSelect(e.dataTransfer.files[0]);
+    }
+});
+
+fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        handleFileSelect(e.target.files[0]);
+    }
+});
+
+function handleFileSelect(file) {
+    if (file.size > 30 * 1024 * 1024) {
+        alert('הקובץ גדול מדי! אנא בחר קובץ עד 30MB למניעת קריסות הדפדפן.');
+        return;
+    }
+    selectedFileForUpload = file;
+    uploadZone.style.display = 'none';
+    uploadFileInfo.style.display = 'block';
+    uploadFileName.textContent = file.name;
+    uploadFileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+    executeUploadBtn.style.display = 'inline-flex';
+}
+
+function resetUploadUI() {
+    selectedFileForUpload = null;
+    uploadZone.style.display = 'block';
+    uploadFileInfo.style.display = 'none';
+    uploadProgress.style.display = 'none';
+    executeUploadBtn.style.display = 'none';
+    fileInput.value = '';
+}
+
+// שליחת הקובץ ל-Google Apps Script
+executeUploadBtn.addEventListener('click', async () => {
+    if (!selectedFileForUpload) return;
+    
+    if (!CONFIG.UPLOAD_URL) {
+        alert('כתובת שרת ההעלאות אינה מוגדרת. פנה למנהל האתר.');
+        return;
+    }
+    
+    executeUploadBtn.style.display = 'none';
+    uploadProgress.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> מעלה קובץ לשרת, אנא המתן...';
+    uploadProgress.style.display = 'flex';
+    uploadProgress.style.color = 'var(--primary)';
+    
+    try {
+        // המרת הקובץ לטקסט Base64 כדי שנוכל לשלוח אותו בקלות ובבטחה
+        const base64Data = await readFileAsBase64(selectedFileForUpload);
+        const b64 = base64Data.split(',')[1]; // חילוץ הנתונים הנקיים
+        
+        // שליחת הנתונים לסקריפט כ-text/plain כדי למנוע חסימות דפדפן (CORS)
+        const response = await fetch(CONFIG.UPLOAD_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+                filename: selectedFileForUpload.name,
+                mimeType: selectedFileForUpload.type || 'application/octet-stream',
+                fileData: b64
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+            uploadProgress.style.color = '#0F9D58';
+            uploadProgress.innerHTML = '<i class="fa-solid fa-circle-check"></i> הקובץ הועלה ונקלט בהצלחה!';
+            setTimeout(() => {
+                uploadModal.classList.remove('visible');
+            }, 3000);
+        } else {
+            throw new Error(result.message);
+        }
+    } catch (error) {
+        uploadProgress.style.color = 'var(--danger)';
+        uploadProgress.innerHTML = `<div style="text-align: right;"><i class="fa-solid fa-triangle-exclamation"></i> <strong>שגיאה בהעלאה:</strong> ${error.message || 'שגיאת רשת'}<br><small>אנא נסו להשתמש באפשרות השליחה למייל המופיעה למטה.</small></div>`;
+        executeUploadBtn.style.display = 'inline-flex';
+    }
+});
+
+function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+    });
+}
 
 document.getElementById('authBtn').addEventListener('click', () => {
     tokenClient.requestAccessToken({prompt: 'select_account'});
@@ -802,7 +1119,7 @@ window.onload = () => {
                 state.accessToken = res.access_token;
                 localStorage.setItem('gdrive_auth_active', 'true'); 
                 document.getElementById('loginOverlay').classList.remove('visible');
-                document.getElementById('userMenuWrap').classList.add('visible'); // מציג את אייקון הפרופיל
+                document.getElementById('userMenuWrap').classList.add('visible'); 
                 initDatabase();
             }
         },
@@ -829,9 +1146,7 @@ window.onload = () => {
         document.getElementById('loginOverlay').classList.add('visible');
     }
 
-    // הפעלת הבדיקה האוטומטית לאחר 10 שניות (10,000 מילישניות)
     setTimeout(() => {
-        // בודק אם המשתמש לא מחובר וגם לא נמצא כרגע מול מסך החסימה הראשי
         if (!state.accessToken && !document.getElementById('loginOverlay').classList.contains('visible')) {
             document.getElementById('delayedAuthModal').classList.add('visible');
         }
