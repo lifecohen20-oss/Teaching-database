@@ -21,7 +21,7 @@ def main():
     page_token = None
     
     # הגדרת השדות שאנחנו רוצים לשלוף
-    fields = "nextPageToken, files(id, name, mimeType, size, modifiedTime, webViewLink, webContentLink, thumbnailLink, hasThumbnail, iconLink, parents)"
+    fields = "nextPageToken, files(id, name, mimeType, size, modifiedTime, webViewLink, webContentLink, thumbnailLink, hasThumbnail, iconLink, parents, shortcutDetails)"
     
     # מכיוון שהרובוט משותף רק עם תיקיית הארכיון, אנחנו שולפים פשוט הכל!
     print("מתחיל בסריקת הקבצים...")
