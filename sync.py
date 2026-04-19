@@ -37,7 +37,6 @@ def main():
     scanned_folders = set()
     folders_to_scan = []
     
-    # איתור כל קיצורי הדרך לתיקיות מתוך המקבץ הראשון
     for f in all_files:
         if f.get('mimeType') == 'application/vnd.google-apps.shortcut':
             details = f.get('shortcutDetails', {})
@@ -49,7 +48,6 @@ def main():
     if folders_to_scan:
         print(f"נמצאו {len(folders_to_scan)} קיצורי דרך לתיקיות. מתחיל סריקה עמוקה שלהן...")
         
-    # לולאה שסורקת את התיקיות, ומוסיפה גם תתי-תיקיות חדשות אם נמצאו בתוכן
     while folders_to_scan:
         current_folder_id = folders_to_scan.pop(0)
         if current_folder_id in scanned_folders:
@@ -59,7 +57,6 @@ def main():
         page_token = None
         try:
             while True:
-                # פנייה מפורשת ל-ID של תיקיית המקור (עובד מעולה עם תיקיות פומביות)
                 results = service.files().list(
                     q=f"'{current_folder_id}' in parents and trashed = false",
                     pageSize=1000,
@@ -69,10 +66,8 @@ def main():
                 
                 items = results.get('files', [])
                 for item in items:
-                    # מניעת כפילויות (במידה והקובץ כבר שותף איתנו גם בדרך אחרת)
                     if not any(existing['id'] == item['id'] for existing in all_files):
                         all_files.append(item)
-                        # אם מצאנו תת-תיקייה בתוך קיצור הדרך, נסרוק גם אותה
                         if item.get('mimeType') == 'application/vnd.google-apps.folder':
                             folders_to_scan.append(item['id'])
                             
@@ -84,17 +79,18 @@ def main():
 
     print(f"הסריקה הושלמה בהצלחה. סך הכל {len(all_files)} פריטים.")
 
-    # בניית אובייקט הנתונים ושמירה לקובץ
+    # בניית אובייקט הנתונים
     database = {
         "root_folder_id": folder_id,
         "total_items": len(all_files),
         "files": all_files
     }
 
+    # *** התיקון הקריטי כאן: שמירה מכווצת ללא רווחים (מוריד משקל ב-80%) ***
     with open('database.json', 'w', encoding='utf-8') as f:
-        json.dump(database, f, ensure_ascii=False, indent=2)
+        json.dump(database, f, ensure_ascii=False, separators=(',', ':'))
     
-    print("קובץ database.json עודכן!")
+    print("קובץ database.json נוצר בהצלחה בפורמט מכווץ!")
 
 if __name__ == '__main__':
     main()
