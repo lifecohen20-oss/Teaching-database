@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     :root {
       --bg: #F8F9FA;
@@ -101,32 +100,11 @@
     .search-banner { display: none; align-items: center; gap: 12px; background: var(--primary-light); border: 1px solid var(--primary); border-radius: var(--radius); padding: 12px 20px; margin-bottom: 24px; color: var(--text); }
     .search-banner.visible { display: flex; }
     
-    .error-box { display: none; align-items: flex-start; gap: 12px; background: var(--danger-bg); border: 1px solid var(--danger); border-radius: var(--radius); padding: 16px 20px; color: var(--danger); font-size: 1rem; margin-bottom: 24px; line-height: 1.5; }
-    .error-box.visible { display: flex; }
-
-    /* עיצוב להודעת חסימת גישה בתוך הסייר */
-    .access-denied-container { 
-      grid-column: 1 / -1; 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      justify-content: center; 
-      text-align: center; 
-      padding: 60px 20px;
-      background: var(--surface);
-      border: 1px dashed var(--danger);
-      border-radius: var(--radius);
-      animation: fadeInUp 0.5s ease;
-    }
-    .access-denied-icon { font-size: 4rem; color: var(--danger); margin-bottom: 20px; opacity: 0.8; }
-    .access-denied-title { font-size: 1.4rem; font-weight: 700; color: var(--text); margin-bottom: 12px; }
-    .access-denied-text { font-size: 1.1rem; color: var(--text-muted); max-width: 500px; line-height: 1.6; margin-bottom: 24px; }
-    
     /* ===== FILE GRID/LIST ===== */
     #fileContainer.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
     #fileContainer.list { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
     
-    .file-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; text-align: right; position: relative; animation: fadeInUp 0.5s ease forwards; opacity: 0; }
+    .file-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; text-align: right; position: relative; animation: fadeInUp 0.3s ease forwards; opacity: 0; }
     
     #fileContainer.grid .file-card { padding: 12px; gap: 10px; }
     #fileContainer.grid .file-card:hover { box-shadow: var(--shadow-card-hover); transform: translateY(-4px); }
@@ -144,19 +122,10 @@
     #fileContainer.list .file-card .name { -webkit-line-clamp: 1; line-clamp: 1; flex: 1; padding: 0; }
     #fileContainer.list .file-card .meta { margin-top: 0; width: 150px; text-align: left; padding: 0; }
     
-    .download-btn { position: absolute; top: 16px; left: 16px; width: 34px; height: 34px; background: var(--surface); border: 1px solid var(--border); border-radius: 50%; color: var(--text-muted); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; text-decoration: none; opacity: 0; transform: scale(0.8); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 5; box-shadow: var(--shadow-card); }
-    #fileContainer.grid .file-card:hover .download-btn { opacity: 1; transform: scale(1); }
-    .download-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
-    #fileContainer.list .download-btn { position: relative; top: auto; left: auto; opacity: 0; box-shadow: none; border-color: transparent; background: transparent; width: auto; height: auto; padding: 8px; }
-    #fileContainer.list .file-card:hover .download-btn { opacity: 1; transform: scale(1); }
+    .state-box { grid-column: 1 / -1; text-align: center; padding: 100px 20px; color: var(--text-muted); font-size: 1.1rem;}
+    #loadMoreBtn { display: none; margin: 32px auto; padding: 10px 24px; background: transparent; border: none; color: var(--primary); text-align: center; font-size: 1.1rem; }
     
-    .skeleton { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; position: relative; }
-    .skeleton::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.04) 50%, transparent 100%); animation: shimmer 1.5s infinite; }
-    .skeleton-grid { height: 200px; }
-    .skeleton-list { height: 60px; }
-    
-    .state-box { grid-column: 1 / -1; text-align: center; padding: 100px 20px; color: var(--text-muted); }
-    #loadMoreBtn { display: none; margin: 32px auto; padding: 10px 24px; background: var(--surface); border: 1px solid var(--border); color: var(--primary); border-radius: var(--radius); cursor: pointer; font-weight: 500; }
+    .footer-copyright { text-align: center; padding: 24px; color: var(--text-dim); font-size: 0.85rem; margin-top: 40px; border-top: 1px solid var(--border); }
     
     .overlay { position: fixed; inset: 0; background: rgba(32, 33, 36, 0.6); backdrop-filter: blur(4px); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px; opacity: 0; transition: opacity 0.3s ease; }
     .overlay.visible { display: flex; opacity: 1; }
@@ -171,11 +140,14 @@
     .preview-actions { display: flex; gap: 10px; }
     .preview-iframe { flex: 1; width: 100%; border: none; background: #fff; }
     
+    /* מסך טעינה התחלתי */
+    #startupLoader { position: fixed; inset: 0; background: var(--bg); z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--primary); }
+    #startupLoader i { font-size: 3rem; margin-bottom: 16px; }
+    #startupLoader span { font-size: 1.2rem; font-weight: 500; color: var(--text); }
+    
     .primary-btn { background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: 4px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; }
-    .secondary-btn { background: transparent; color: var(--primary); border: 1px solid var(--border); padding: 12px 24px; border-radius: 4px; font-weight: 500; cursor: pointer; margin-top: 12px; }
     
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes shimmer { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
     
     @media (max-width: 900px) { #sidebar { display: none; } .logo { width: auto; } }
     @media (max-width: 600px) { header { padding: 0 16px; gap: 12px; } .logo-text { display: none; } .search-wrap { margin: 0; } main { padding: 16px; } #breadcrumb { padding: 12px 16px; } #fileContainer.grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; } #fileContainer.grid .file-card .icon-wrap { height: 120px; } .toolbar { flex-direction: column; align-items: stretch; gap: 12px; } .toolbar-left { justify-content: space-between; } .modal-box { padding: 32px 24px; } }
@@ -183,15 +155,10 @@
 </head>
 <body>
 
-<!-- חלון התחברות -->
-<div id="loginOverlay" class="overlay">
-  <div class="modal-box">
-    <div class="modal-icon"><i class="fa-brands fa-google"></i></div>
-    <h1 class="modal-title">התחברות לארכיון</h1>
-    <p class="modal-text">כדי לצפות בקבצים פרטיים בארכיון, יש צורך בהתחברות לאישור הרשאות מול גוגל.</p>
-    <button id="authBtn" class="primary-btn" style="width:100%;"><i class="fa-solid fa-shield-halved"></i> התחברות באמצעות Google</button>
-    <button id="skipAuthBtn" class="secondary-btn" style="width:100%;">המשך ללא התחברות (לקבצים ציבוריים)</button>
-  </div>
+<!-- מסך טעינה ראשוני של מסד הנתונים מ-GitHub -->
+<div id="startupLoader">
+  <i class="fa-solid fa-circle-notch fa-spin"></i>
+  <span>מסנכרן מסד נתונים...</span>
 </div>
 
 <!-- חלון אודות -->
@@ -200,8 +167,13 @@
     <button class="modal-close" id="closeAboutBtn" style="position:absolute; top:15px; right:15px; background:none; border:none; cursor:pointer; font-size:1.2rem; color:var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
     <div class="modal-icon" style="color: var(--folder);"><i class="fa-solid fa-circle-info"></i></div>
     <h1 class="modal-title">אודות המערכת</h1>
-    <p class="modal-text">ארכיון מסמכים מתקדם המחובר ישירות ל-Google Drive.<br>המערכת מאפשרת תצוגה מקדימה, חיפוש, וצפייה בתמונות.</p>
-    <a href="#" class="primary-btn" id="requestAccessAboutBtn" style="text-decoration:none; width:100%;"><i class="fa-solid fa-envelope"></i> פניה למנהל (בקשת גישה)</a>
+    <p class="modal-text">
+      ארכיון מסמכים מתקדם המחובר למסד נתונים סטאטי לקבלת ביצועים מקסימליים.<br><br>
+      <span style="font-size: 0.9rem; opacity: 0.8; display: block; line-height: 1.4;">
+        * מובהר בזאת כי איננו יודעים את המקור של כל הקבצים המוצגים בארכיון. אנו מזמינים את הבעלים להגיש תביעת בעלות או בקשת הסרה במקרה הצורך, ומתנצלים מראש על כך.
+      </span>
+    </p>
+    <a href="#" class="primary-btn" id="requestAccessAboutBtn" style="text-decoration:none; width:100%;"><i class="fa-solid fa-envelope"></i> פניה למנהל</a>
   </div>
 </div>
 
@@ -215,6 +187,10 @@
         <button class="icon-btn" id="closePreviewBtn" title="סגור" style="background:var(--danger-bg); color:var(--danger);"><i class="fa-solid fa-xmark"></i></button>
       </div>
     </div>
+    <!-- הערת אבטחה בתוך התצוגה המקדימה -->
+    <div style="background: var(--danger-bg); color: var(--danger); padding: 8px; font-size: 0.85rem;">
+      <i class="fa-solid fa-lock"></i> קבצי הארכיון מוגנים. אם התצוגה המקדימה חסומה, סימן שאינך מחובר בקבוצת המורשים של גוגל.
+    </div>
     <iframe id="previewIframe" class="preview-iframe" allow="autoplay"></iframe>
   </div>
 </div>
@@ -226,7 +202,7 @@
   </a>
   <div class="search-wrap">
     <div class="search-inner">
-      <input type="text" id="searchInput" placeholder="חיפוש קבצים ותיקיות..." />
+      <input type="text" id="searchInput" placeholder="חיפוש מהיר בתיקייה הנוכחית..." />
       <span class="search-icon-left"><i class="fa-solid fa-magnifying-glass"></i></span>
       <button class="search-clear" id="searchClear"><i class="fa-solid fa-xmark"></i></button>
     </div>
@@ -253,200 +229,254 @@
       </select>
       <div id="itemCount" class="item-count"></div>
     </div>
-    <div class="search-banner" id="searchBanner">
-      <span id="searchTerm"></span>
-      <button class="search-banner-close" id="searchBannerClose"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    
-    <!-- אזור שגיאות כלליות (יישאר למקרה של שגיאות מערכת) -->
-    <div class="error-box" id="errorBox">
-      <div style="font-size: 1.5rem;"><i class="fa-solid fa-circle-exclamation"></i></div>
-      <div id="errorMsg" style="flex: 1;"></div>
-    </div>
     
     <div id="fileContainer" class="grid"></div>
-    <button id="loadMoreBtn">הצג עוד קבצים</button>
+    <div id="loadMoreBtn"><i class="fa-solid fa-circle-notch fa-spin"></i> טוען קבצים נוספים...</div>
+    
+    <div class="footer-copyright">
+      כל הזכויות שמורות. מיועד לשימוש אישי בלבד, אין לעשות שימוש עסקי בשום פנים ואופן.
+    </div>
   </main>
 </div>
--7
+
 <script>
 // ============================================================
-//  CONFIG
+// CONFIGURATION
 // ============================================================
 const CONFIG = {
-  API_KEY:     'AIzaSyDp7wMhHTOrydG8NS0MQlseIdMLOj4Qw4I',   // <-- החלף במפתח ה-API שלך
-  CLIENT_ID:   '877688936197-d2q7g35q7n4785hl90emknh8plnv7mrq.apps.googleusercontent.com', // <-- החלף ב-Client ID שלך
-  ROOT_ID:     '1FR9QRJ9moyu612adzeniO-vxFgM3Enl9',   // <-- החלף ב-ID של התיקייה שלך
-  PAGE_SIZE:   100,
-  ADMIN_EMAIL: 'lifecohen20@gmail.com'
+  // כתובת ה-Raw לקובץ ה-JSON ב-GitHub (שים לב לנתיב)
+  DB_URL: 'https://raw.githubusercontent.com/lifecohen20-oss/Teaching-database/main/database.json',
+  ADMIN_EMAIL: 'lifecohen20@gmail.com',
+  PAGE_SIZE: 100,
+  ROOT_ID: '' // יתמלא אוטומטית ממסד הנתונים
 };
 // ============================================================
 
 const MIME_FOLDER = 'application/vnd.google-apps.folder';
+
+// הוספנו סוגים ספציפיים (בעיקר של פורמטים מיוחדים של גוגל)
 const FILE_TYPES = {
   'application/vnd.google-apps.folder': { icon: '<i class="fa-solid fa-folder"></i>', color: 'var(--folder)' },
   'application/pdf': { icon: '<i class="fa-solid fa-file-pdf"></i>', color: '#DB4437' },
-  'image/jpeg': { icon: '<i class="fa-solid fa-image"></i>', color: '#DB4437' },
-  'image/png': { icon: '<i class="fa-solid fa-image"></i>', color: '#DB4437' },
-  'video/mp4': { icon: '<i class="fa-solid fa-file-video"></i>', color: '#DB4437' },
   'application/vnd.google-apps.document': { icon: '<i class="fa-solid fa-file-word"></i>', color: '#4285F4' },
   'application/vnd.google-apps.spreadsheet': { icon: '<i class="fa-solid fa-file-excel"></i>', color: '#0F9D58' },
   'application/vnd.google-apps.presentation': { icon: '<i class="fa-solid fa-file-powerpoint"></i>', color: '#F4B400' },
+  'application/vnd.google-apps.form': { icon: '<i class="fa-solid fa-list-check"></i>', color: '#7248B9' },
+  'application/vnd.google-apps.script': { icon: '<i class="fa-solid fa-file-code"></i>', color: '#0F9D58' },
+  'application/vnd.google-apps.site': { icon: '<i class="fa-solid fa-sitemap"></i>', color: '#4285F4' },
   'text/plain': { icon: '<i class="fa-solid fa-file-lines"></i>', color: '#4285F4' }
 };
 
 function getFileType(mimeType) {
-  return FILE_TYPES[mimeType] || { icon: '<i class="fa-solid fa-file"></i>', color: 'var(--text-muted)' };
+  // החזרת ברירת מחדל במקרה שאין Mime Type
+  if (!mimeType) return { icon: '<i class="fa-solid fa-file"></i>', color: 'var(--text-muted)' };
+  
+  // בדיקה במילון הספציפי
+  if (FILE_TYPES[mimeType]) return FILE_TYPES[mimeType];
+
+  // זיהוי כללי חכם שתומך בכל סוגי הקבצים (תמונות, סרטונים, כיווץ, קוד, ועוד)
+  const type = mimeType.toLowerCase();
+  
+  if (type.startsWith('image/')) return { icon: '<i class="fa-solid fa-image"></i>', color: '#DB4437' };
+  if (type.startsWith('video/')) return { icon: '<i class="fa-solid fa-file-video"></i>', color: '#DB4437' };
+  if (type.startsWith('audio/')) return { icon: '<i class="fa-solid fa-file-audio"></i>', color: '#F4B400' };
+  if (type.includes('zip') || type.includes('rar') || type.includes('tar') || type.includes('7z') || type.includes('compressed')) {
+      return { icon: '<i class="fa-solid fa-file-zipper"></i>', color: '#5F6368' };
+  }
+  if (type.includes('msword') || type.includes('wordprocessingml') || type.includes('document')) {
+      return { icon: '<i class="fa-solid fa-file-word"></i>', color: '#4285F4' };
+  }
+  if (type.includes('excel') || type.includes('spreadsheet')) {
+      return { icon: '<i class="fa-solid fa-file-excel"></i>', color: '#0F9D58' };
+  }
+  if (type.includes('powerpoint') || type.includes('presentation')) {
+      return { icon: '<i class="fa-solid fa-file-powerpoint"></i>', color: '#F4B400' };
+  }
+  if (type.includes('pdf')) return { icon: '<i class="fa-solid fa-file-pdf"></i>', color: '#DB4437' };
+  if (type.includes('text/') || type.includes('json') || type.includes('javascript') || type.includes('html') || type.includes('xml') || type.includes('csv')) {
+      return { icon: '<i class="fa-solid fa-file-code"></i>', color: '#4285F4' };
+  }
+
+  // תצוגת ברירת מחדל לקבצים לא מוכרים
+  return { icon: '<i class="fa-solid fa-file"></i>', color: 'var(--text-muted)' };
 }
 
 function escapeHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function debounce(func, wait) {
-  let timeout;
-  return function(...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
-}
-
 let state = {
-  stack: [{ id: CONFIG.ROOT_ID, name: 'בית' }],
-  nextPageToken: null,
-  currentQuery: '',
+  db: [], // יכיל את כל הנתונים מ-GitHub
+  currentList: [], // יכיל את הנתונים המסוננים לתצוגה הנוכחית
+  stack: [], 
+  currentPage: 0,
   isSearchMode: false,
-  loading: false,
   view: 'grid',
-  sort: 'folder,name',
-  recentFolders: [],
-  accessToken: null,
-  skippedAuth: false
+  sort: 'folder,name'
 };
 
-let tokenClient;
+// ============================================================
+// טעינת מסד הנתונים
+// ============================================================
+async function initDatabase() {
+    try {
+        const res = await fetch(CONFIG.DB_URL, { cache: 'no-store' }); // מונע שמירת קאש ישן מדי בדפדפן
+        if (!res.ok) throw new Error('שגיאה בטעינת הנתונים מ-GitHub');
+        const data = await res.json();
+        
+        state.db = data.files || [];
+        CONFIG.ROOT_ID = data.root_folder_id;
+        state.stack = [{ id: CONFIG.ROOT_ID, name: 'בית' }];
+        
+        document.getElementById('startupLoader').style.display = 'none';
+        
+        renderBreadcrumb();
+        loadFolder(CONFIG.ROOT_ID);
+        
+    } catch (e) {
+        document.getElementById('startupLoader').innerHTML = `
+          <i class="fa-solid fa-triangle-exclamation" style="color:var(--danger)"></i>
+          <span style="color:var(--danger)">שגיאה: לא ניתן לטעון את מסד הנתונים.</span>
+          <small style="margin-top:10px;">${e.message}</small>
+        `;
+    }
+}
 
-async function apiFetch(url) {
-  const headers = {};
-  if (state.accessToken) headers['Authorization'] = 'Bearer ' + state.accessToken;
-  const res = await fetch(url, { headers });
-  if (!res.ok) {
-    if ((res.status === 401 || res.status === 403 || res.status === 404)) {
-        if (!state.skippedAuth && !state.accessToken) {
-            document.getElementById('loginOverlay').classList.add('visible');
-            throw new Error('AUTH_REQUIRED');
-        } else {
-            throw new Error('ACCESS_DENIED');
+// ============================================================
+// לוגיקת פילטור ומיון (In-Memory)
+// ============================================================
+function sortItems(items) {
+    items.sort((a, b) => {
+        if (state.sort === 'folder,name') {
+            // קודם תיקיות, ואז לפי שם א-ב
+            if (a.mimeType === MIME_FOLDER && b.mimeType !== MIME_FOLDER) return -1;
+            if (a.mimeType !== MIME_FOLDER && b.mimeType === MIME_FOLDER) return 1;
+            return a.name.localeCompare(b.name, 'he');
+        } else if (state.sort === 'modifiedTime desc') {
+            // לפי תאריך שינוי יורד
+            return new Date(b.modifiedTime) - new Date(a.modifiedTime);
         }
-    }
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || 'שגיאה: ' + res.status);
-  }
-  return res.json();
-}
-
-const API_FIELDS = 'nextPageToken,files(id,name,mimeType,size,modifiedTime,webViewLink,webContentLink,thumbnailLink,hasThumbnail,iconLink)';
-
-async function loadFolder(folderId, append = false) {
-  if (state.loading) return;
-  state.loading = true;
-  document.getElementById('errorBox').classList.remove('visible');
-  
-  if (!append) {
-      document.getElementById('fileContainer').innerHTML = Array(8).fill('<div class="skeleton skeleton-grid"></div>').join('');
-      document.getElementById('loadMoreBtn').style.display = 'none';
-  }
-  
-  try {
-    const q = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
-    let url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${encodeURIComponent(API_FIELDS)}&pageSize=${CONFIG.PAGE_SIZE}&orderBy=${encodeURIComponent(state.sort)}&key=${CONFIG.API_KEY}`;
-    if (state.nextPageToken && append) url += '&pageToken=' + state.nextPageToken;
-    
-    const data = await apiFetch(url);
-    state.nextPageToken = data.nextPageToken || null;
-    renderItems(data.files || [], append);
-    document.getElementById('loadMoreBtn').style.display = state.nextPageToken ? 'block' : 'none';
-  } catch(e) {
-    if (e.message === 'AUTH_REQUIRED') {
-        state.loading = false;
-        return; 
-    }
-    
-    if (e.message === 'ACCESS_DENIED') {
-        renderAccessDenied();
-    } else {
-        document.getElementById('errorMsg').innerHTML = e.message;
-        document.getElementById('errorBox').classList.add('visible');
-    }
-    
-    if (!append && e.message !== 'ACCESS_DENIED') document.getElementById('fileContainer').innerHTML = '';
-  } finally { 
-    state.loading = false; 
-  }
-}
-
-// פונקציה להצגת הודעת חוסר גישה בתוך הסייר
-function renderAccessDenied() {
-    const container = document.getElementById('fileContainer');
-    const mailto = `mailto:${CONFIG.ADMIN_EMAIL}?subject=${encodeURIComponent("בקשת הצטרפות לקבוצת הארכיון")}&body=${encodeURIComponent("שלום,\nאשמח לקבל הרשאת גישה לארכיון המסמכים.\nשם משתמש (מייל): \n")}`;
-    
-    container.innerHTML = `
-      <div class="access-denied-container">
-        <div class="access-denied-icon"><i class="fa-solid fa-user-lock"></i></div>
-        <h2 class="access-denied-title">אין לך הרשאת גישה לארכיון</h2>
-        <p class="access-denied-text">
-          הקבצים בארכיון זה מוגדרים כפרטיים ומוצגים רק לחברים המורשים בקבוצה שלנו.<br>
-          כדי לצפות בתכנים, עליך להתחבר קודם לקבוצת המורשים.
-        </p>
-        <a href="${mailto}" class="primary-btn">
-          <i class="fa-solid fa-envelope"></i> שלח מייל למנהל לבקשת גישה
-        </a>
-      </div>
-    `;
-    document.getElementById('itemCount').textContent = '0 פריטים';
-    document.getElementById('loadMoreBtn').style.display = 'none';
-}
-
-function renderItems(items, append) {
-  const container = document.getElementById('fileContainer');
-  if (!append) container.innerHTML = '';
-  if (items.length === 0 && !append) {
-      if (state.isSearchMode) {
-          container.innerHTML = '<div class="state-box">לא נמצאו תוצאות לחיפוש</div>';
-      } else {
-          // אם זה לא חיפוש והתיקייה ריקה (אין הרשאות לראות את הקבצים) - נציג את הודעת החסימה
-          renderAccessDenied();
-      }
-      return;
-  }
-  items.forEach((item, i) => {
-    const ft = getFileType(item.mimeType);
-    const card = document.createElement('div');
-    card.className = 'file-card' + (item.mimeType === MIME_FOLDER ? ' folder-card' : '');
-    card.style.animationDelay = (i * 0.03) + 's';
-    
-    let iconHtml = `<div class="icon-wrap" style="color:${ft.color};">${ft.icon}</div>`;
-    if (item.hasThumbnail && item.thumbnailLink) {
-        const hqThumbnail = item.thumbnailLink.replace('=s220', '=s800');
-        iconHtml = `<div class="icon-wrap"><img src="${hqThumbnail}" alt="תמונה ממוזערת" referrerpolicy="no-referrer" loading="lazy" /></div>`;
-    }
-
-    card.innerHTML = `
-      ${iconHtml}
-      <div class="name">${escapeHtml(item.name)}</div>
-      ${!item.size ? '' : `<div class="meta">${(item.size/1024).toFixed(1)} KB</div>`}
-    `;
-    
-    card.addEventListener('click', () => {
-        if (item.mimeType === MIME_FOLDER) {
-            openFolder(item.id, item.name);
-        } else {
-            openPreview(item.id, item.name, item.webViewLink);
-        }
+        return 0;
     });
-    container.appendChild(card);
-  });
-  document.getElementById('itemCount').textContent = container.children.length + ' פריטים';
+    return items;
+}
+
+function loadFolder(folderId) {
+    state.isSearchMode = false;
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchClear').classList.remove('visible');
+    
+    // סינון כל הקבצים שההורה שלהם הוא התיקייה המבוקשת
+    let items = state.db.filter(f => f.parents && f.parents.includes(folderId));
+    items = sortItems(items);
+    
+    state.currentList = items;
+    state.currentPage = 0;
+    
+    document.getElementById('fileContainer').innerHTML = '';
+    updateSidebar(items);
+    renderPage(true);
+}
+
+function searchFiles(query) {
+    if (!query) {
+        loadFolder(state.stack[state.stack.length-1].id);
+        return;
+    }
+    
+    state.isSearchMode = true;
+    const currentFolderId = state.stack[state.stack.length-1].id;
+    const q = query.toLowerCase();
+    
+    // חיפוש בתוך התיקייה הנוכחית בלבד
+    let items = state.db.filter(f => 
+        f.name.toLowerCase().includes(q) && 
+        f.parents && f.parents.includes(currentFolderId)
+    );
+    
+    items = sortItems(items);
+    state.currentList = items;
+    state.currentPage = 0;
+    
+    document.getElementById('fileContainer').innerHTML = '';
+    renderPage(true);
+}
+
+// טעינת עמודים (Infinite Scroll) מתוך המערך השמור בזיכרון
+function renderPage(isFirstPage = false) {
+    const container = document.getElementById('fileContainer');
+    const start = state.currentPage * CONFIG.PAGE_SIZE;
+    const end = start + CONFIG.PAGE_SIZE;
+    const pageItems = state.currentList.slice(start, end);
+    
+    if (isFirstPage && state.currentList.length === 0) {
+        container.innerHTML = '<div class="state-box"><i class="fa-regular fa-folder-open" style="font-size:3rem;margin-bottom:15px;color:var(--border);"></i><br>התיקייה ריקה או שלא נמצאו תוצאות</div>';
+        document.getElementById('itemCount').textContent = '0 פריטים';
+        document.getElementById('loadMoreBtn').style.display = 'none';
+        return;
+    }
+
+    pageItems.forEach((item, i) => {
+        const ft = getFileType(item.mimeType);
+        const card = document.createElement('div');
+        card.className = 'file-card' + (item.mimeType === MIME_FOLDER ? ' folder-card' : '');
+        card.style.animationDelay = ((i % 20) * 0.03) + 's'; // אנימציה זורמת רק לאלמנטים החדשים
+        
+        let iconHtml = `<div class="icon-wrap" style="color:${ft.color};">${ft.icon}</div>`;
+        if (item.hasThumbnail && item.thumbnailLink) {
+            const hqThumbnail = item.thumbnailLink.replace('=s220', '=s800');
+            iconHtml = `<div class="icon-wrap"><img src="${hqThumbnail}" alt="תמונה ממוזערת" referrerpolicy="no-referrer" loading="lazy" /></div>`;
+        }
+
+        card.innerHTML = `
+          ${iconHtml}
+          <div class="name">${escapeHtml(item.name)}</div>
+          ${!item.size ? '' : `<div class="meta">${(item.size/1024).toFixed(1)} KB</div>`}
+        `;
+        
+        card.addEventListener('click', () => {
+            if (item.mimeType === MIME_FOLDER) {
+                openFolder(item.id, item.name);
+            } else {
+                openPreview(item.id, item.name, item.webViewLink);
+            }
+        });
+        container.appendChild(card);
+    });
+    
+    document.getElementById('itemCount').textContent = state.currentList.length + ' פריטים';
+    
+    state.currentPage++;
+    
+    // הצגה או הסתרה של סמל הטעינה בתחתית
+    if (state.currentList.length > end) {
+        document.getElementById('loadMoreBtn').style.display = 'block';
+    } else {
+        document.getElementById('loadMoreBtn').style.display = 'none';
+    }
+}
+
+// ============================================================
+// ממשק משתמש ואירועים
+// ============================================================
+
+function updateSidebar(items) {
+    const tree = document.getElementById('sidebarTree');
+    tree.innerHTML = '';
+    const folders = items.filter(i => i.mimeType === MIME_FOLDER);
+    
+    if (folders.length === 0) {
+        tree.innerHTML = '<div style="padding: 16px; color: var(--text-muted); font-size: 0.85rem;">אין תיקיות משנה</div>';
+        return;
+    }
+    
+    folders.forEach(f => {
+        const el = document.createElement('div');
+        el.className = 'tree-item';
+        el.innerHTML = `<span class="tree-icon"><i class="fa-solid fa-folder"></i></span> <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</span>`;
+        el.addEventListener('click', () => openFolder(f.id, f.name));
+        tree.appendChild(el);
+    });
 }
 
 function openFolder(id, name) {
@@ -454,31 +484,6 @@ function openFolder(id, name) {
   renderBreadcrumb();
   loadFolder(id);
 }
-
-function openPreview(fileId, fileName, fallbackLink) {
-    const modal = document.getElementById('previewModal');
-    const iframe = document.getElementById('previewIframe');
-    const title = document.getElementById('previewTitle');
-    const openTabBtn = document.getElementById('previewOpenTab');
-    
-    title.innerHTML = `<i class="fa-solid fa-file"></i> ${escapeHtml(fileName)}`;
-    openTabBtn.href = fallbackLink;
-    
-    iframe.src = `https://drive.google.com/file/d/${fileId}/preview`;
-    modal.classList.add('visible');
-}
-
-function closePreview() {
-    const modal = document.getElementById('previewModal');
-    const iframe = document.getElementById('previewIframe');
-    modal.classList.remove('visible');
-    setTimeout(() => { iframe.src = ''; }, 300);
-}
-
-document.getElementById('closePreviewBtn').addEventListener('click', closePreview);
-document.getElementById('previewModal').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('previewModal')) closePreview();
-});
 
 function renderBreadcrumb() {
   const b = document.getElementById('breadcrumb');
@@ -497,7 +502,6 @@ function renderBreadcrumb() {
     }
     
     b.appendChild(span);
-    
     if (i < state.stack.length - 1) {
         const sep = document.createElement('span');
         sep.className = 'crumb-sep';
@@ -507,47 +511,52 @@ function renderBreadcrumb() {
   });
 }
 
-const search = debounce(async (val) => {
-    if (!val) { loadFolder(state.stack[state.stack.length-1].id); return; }
-    state.loading = true;
-    try {
-        const q = encodeURIComponent(`name contains '${val.replace(/'/g,"\\'")}' and trashed = false`);
-        const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${encodeURIComponent(API_FIELDS)}&key=${CONFIG.API_KEY}`;
-        const data = await apiFetch(url);
-        renderItems(data.files || [], false);
-    } catch(e) { 
-        if (e.message === 'ACCESS_DENIED') renderAccessDenied();
-        else {
-            document.getElementById('errorMsg').innerHTML = e.message;
-            document.getElementById('errorBox').classList.add('visible');
-        }
-    }
-    finally { state.loading = false; }
-}, 500);
+function openPreview(fileId, fileName, fallbackLink) {
+    const modal = document.getElementById('previewModal');
+    const iframe = document.getElementById('previewIframe');
+    const title = document.getElementById('previewTitle');
+    const openTabBtn = document.getElementById('previewOpenTab');
+    
+    title.innerHTML = `<i class="fa-solid fa-file"></i> ${escapeHtml(fileName)}`;
+    openTabBtn.href = fallbackLink;
+    
+    // מנסה להציג את התצוגה המקדימה של גוגל. גוגל תטפל בבדיקת ההרשאות בתוך האייפריים.
+    iframe.src = `https://drive.google.com/file/d/${fileId}/preview`;
+    modal.classList.add('visible');
+}
+
+function closePreview() {
+    const modal = document.getElementById('previewModal');
+    const iframe = document.getElementById('previewIframe');
+    modal.classList.remove('visible');
+    setTimeout(() => { iframe.src = ''; }, 300);
+}
+
+document.getElementById('closePreviewBtn').addEventListener('click', closePreview);
+document.getElementById('previewModal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('previewModal')) closePreview();
+});
 
 document.getElementById('searchInput').addEventListener('input', (e) => {
     const val = e.target.value;
     document.getElementById('searchClear').classList.toggle('visible', val.length > 0);
-    search(val);
+    searchFiles(val);
 });
 
 document.getElementById('searchClear').addEventListener('click', () => {
     const input = document.getElementById('searchInput');
     input.value = '';
     document.getElementById('searchClear').classList.remove('visible');
-    search('');
+    searchFiles('');
     input.focus();
 });
 
-document.getElementById('searchBannerClose').addEventListener('click', () => {
-    document.getElementById('searchBanner').classList.remove('visible');
-});
-
-document.getElementById('loadMoreBtn').addEventListener('click', () => {
+document.getElementById('sortSelect').addEventListener('change', (e) => {
+    state.sort = e.target.value; 
     if (state.isSearchMode) {
-        search(document.getElementById('searchInput').value, true);
+        searchFiles(document.getElementById('searchInput').value);
     } else {
-        loadFolder(state.stack[state.stack.length-1].id, true);
+        loadFolder(state.stack[state.stack.length-1].id); 
     }
 });
 
@@ -582,51 +591,27 @@ document.getElementById('closeAboutBtn').addEventListener('click', () => {
     document.getElementById('aboutModal').classList.remove('visible');
 });
 
-document.getElementById('skipAuthBtn').addEventListener('click', () => {
-    state.skippedAuth = true;
-    initApp();
-});
-
-document.getElementById('authBtn').addEventListener('click', () => {
-    tokenClient.requestAccessToken();
-});
-
-document.getElementById('sortSelect').addEventListener('change', (e) => {
-    state.sort = e.target.value; 
-    if (!state.isSearchMode) loadFolder(state.stack[state.stack.length-1].id); 
-});
-
-function initApp() {
-    document.getElementById('loginOverlay').classList.remove('visible');
-    renderBreadcrumb();
-    loadFolder(CONFIG.ROOT_ID);
-}
-
 window.onload = () => {
     const mailto = `mailto:${CONFIG.ADMIN_EMAIL}?subject=${encodeURIComponent("בקשת גישה לארכיון")}`;
     document.getElementById('requestAccessAboutBtn').href = mailto;
 
-    tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CONFIG.CLIENT_ID,
-        scope: 'https://www.googleapis.com/auth/drive.readonly',
-        callback: (res) => {
-            if (res.access_token) {
-                state.accessToken = res.access_token;
-                state.skippedAuth = false;
-                initApp();
-            }
-        }
-    });
-    
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-theme');
         document.getElementById('themeBtn').innerHTML = '<i class="fa-solid fa-sun"></i>';
     }
 
-    if (!state.accessToken) {
-        document.getElementById('loginOverlay').classList.add('visible');
-    }
+    // הפעלת מעקב גלילה (Infinite Scroll)
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && loadMoreBtn.style.display !== 'none') {
+            renderPage(false); // טוען את העמוד הבא מתוך המערך בזיכרון
+        }
+    }, { root: document.querySelector('main'), rootMargin: '200px' });
+    observer.observe(loadMoreBtn);
+
+    // התחלת האתר
+    initDatabase();
 };
 </script>
 </body>
