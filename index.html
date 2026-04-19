@@ -802,14 +802,15 @@ function buildFolderMap() {
 }
 
 async function initDatabase() {
-    // שינוי השם ל-V2 יכריח את הדפדפן למחוק את הקובץ השבור מהזיכרון ולהוריד את החדש
-    const dbName = "ArchiveCacheV2";
+    // מוחק גרסאות שבורות וישנות של המטמון כדי שההורדה החדשה תיקלט בצורה חלקה
+    const dbName = "ArchiveCacheV3";
     
-    // מנקה את הזיכרון הישן והשבור כדי לא לבזבז מקום במחשב של המשתמש
     if ('caches' in window) {
         caches.keys().then(names => {
             for (let name of names) {
-                if (name === "ArchiveCache") caches.delete(name);
+                if (name.startsWith("ArchiveCache") && name !== dbName) {
+                    caches.delete(name);
+                }
             }
         });
     }
@@ -831,11 +832,13 @@ async function initDatabase() {
         fetch(CONFIG.DB_URL, { cache: 'no-store' }).then(async (res) => {
             if (res.ok) {
                 const clone = res.clone();
+                const data = await res.json();
+                
                 if ('caches' in window) {
                     const cache = await caches.open(dbName);
                     cache.put(CONFIG.DB_URL, clone);
                 }
-                const data = await res.json();
+                
                 const newLength = (data.files || []).length;
                 const oldLength = state.db.length;
                 
@@ -850,14 +853,27 @@ async function initDatabase() {
                     state.db = data.files || [];
                     buildFolderMap();
                 }
+            } else {
+                throw new Error("שגיאת רשת בטעינת הארכיון: " + res.status);
             }
-        }).catch(e => console.warn('Background sync failed:', e));
+        }).catch(e => {
+            console.warn('Background sync failed:', e);
+            if (!loadedFromCache) {
+                // עצירה חכמה של הגלגל המסתובב והצגת מסך שגיאה אלגנטי למשתמש
+                document.getElementById('startupLoader').innerHTML = `
+                  <i class="fa-solid fa-triangle-exclamation" style="color:var(--danger)"></i>
+                  <span style="color:var(--text); margin-top: 16px; font-weight: bold; font-size: 1.2rem;">אופס! נראה שיש בעיה בחיבור</span>
+                  <small style="color:var(--text-muted); margin-top:8px; max-width: 80%; text-align: center; line-height: 1.5;">לא הצלחנו לטעון את מסד הנתונים.<br>יתכן שיש בעיית רשת או שהקובץ מתעדכן כעת בשרת.<br><br><span style="font-family:monospace; color:var(--danger);">${e.message}</span></small>
+                  <button onclick="location.reload()" class="primary-btn" style="margin-top: 24px; font-family: inherit;"><i class="fa-solid fa-rotate-right"></i> נסה לטעון מחדש</button>
+                `;
+            }
+        });
 
     } catch (e) {
         if (state.db.length === 0) {
             document.getElementById('startupLoader').innerHTML = `
               <i class="fa-solid fa-triangle-exclamation" style="color:var(--danger)"></i>
-              <span style="color:var(--danger)">שגיאה: לא ניתן לטעון את מסד הנתונים.</span>
+              <span style="color:var(--danger); margin-top:10px; font-weight:bold;">שגיאה פנימית במערכת</span>
               <small style="margin-top:10px;">${e.message}</small>
             `;
         }
@@ -1010,7 +1026,7 @@ function renderPage(isFirstPage = false) {
         card.style.animationDelay = ((i % 20) * 0.03) + 's'; 
         
         let iconHtml = `<div class="icon-wrap" style="color:${ft.color};">${ft.icon}</div>`;
-        if (item.hasThumbnail && item.thumbnailLink) {
+        if (item.thumbnailLink) {
             const hqThumbnail = item.thumbnailLink.replace('=s220', '=s800');
             iconHtml = `<div class="icon-wrap"><img src="${hqThumbnail}" alt="תמונה ממוזערת" referrerpolicy="no-referrer" loading="lazy" /></div>`;
         }
@@ -1041,7 +1057,6 @@ function renderPage(isFirstPage = false) {
             `;
         }
 
-        // כפתור ההורדה מקבל את this
         let downloadBtnHtml = '';
         if (isFolder) {
             downloadBtnHtml = `<button class="card-action-btn" title="הורד את כל תוכן התיקייה" onclick="event.stopPropagation(); startFolderDownload('${targetId}', '${escapeHtml(item.name).replace(/'/g, "\\'")}', this)"><i class="fa-solid fa-cloud-arrow-down"></i></button>`;
@@ -1061,7 +1076,8 @@ function renderPage(isFirstPage = false) {
             if (isFolder) {
                 openFolder(targetId, item.name);
             } else {
-                openPreview(targetId, item.name, item.webViewLink);
+                const fallbackLink = item.webViewLink || `https://drive.google.com/file/d/${targetId}/view`;
+                openPreview(targetId, item.name, fallbackLink);
             }
         });
         container.appendChild(card);
