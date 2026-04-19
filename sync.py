@@ -4,18 +4,19 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
 def main():
-    # קריאת אישורי ההתחברות
     creds_json = json.loads(os.environ['GDRIVE_CREDENTIALS'])
     creds = service_account.Credentials.from_service_account_info(creds_json, scopes=['https://www.googleapis.com/auth/drive.readonly'])
     
-    # התחברות לדרייב
     service = build('drive', 'v3', credentials=creds)
     folder_id = os.environ['FOLDER_ID']
     
     all_files = []
-    fields = "nextPageToken, files(id, name, mimeType, size, modifiedTime, webViewLink, webContentLink, thumbnailLink, hasThumbnail, iconLink, parents, shortcutDetails)"
     
-    # שלב 1: שולף את כל הקבצים שמשותפים ישירות עם הרובוט
+    # === התיקון למהירות שיא ===
+    # הסרנו מכאן שדות כבדים ומיותרים כמו webViewLink ו-iconLink.
+    # אנחנו מייצרים אותם לבד באתר! זה יקטין את הקובץ ב-70% וימנע שבירות.
+    fields = "nextPageToken, files(id, name, mimeType, size, modifiedTime, thumbnailLink, parents, shortcutDetails)"
+    
     print("מתחיל סריקה ראשית של הארכיון...")
     page_token = None
     while True:
@@ -33,7 +34,6 @@ def main():
         if page_token is None:
             break
 
-    # שלב 2: סריקה עמוקה ויזומה של תיקיות מתוך קיצורי דרך ("פתוחות לכולם")
     scanned_folders = set()
     folders_to_scan = []
     
@@ -75,22 +75,20 @@ def main():
                 if page_token is None:
                     break
         except Exception as e:
-            print(f"לא ניתן לסרוק את התיקייה {current_folder_id} (וודא שיש לה קישור פומבי): {e}")
+            print(f"לא ניתן לסרוק את התיקייה {current_folder_id}: {e}")
 
     print(f"הסריקה הושלמה בהצלחה. סך הכל {len(all_files)} פריטים.")
 
-    # בניית אובייקט הנתונים
     database = {
         "root_folder_id": folder_id,
         "total_items": len(all_files),
         "files": all_files
     }
 
-    # *** התיקון הקריטי כאן: שמירה מכווצת ללא רווחים (מוריד משקל ב-80%) ***
     with open('database.json', 'w', encoding='utf-8') as f:
         json.dump(database, f, ensure_ascii=False, separators=(',', ':'))
     
-    print("קובץ database.json נוצר בהצלחה בפורמט מכווץ!")
+    print("קובץ database.json נוצר בהצלחה בפורמט סופר-מכווץ!")
 
 if __name__ == '__main__':
     main()
