@@ -785,7 +785,6 @@ function buildFolderMap() {
         const actualMimeType = isShortcut ? f.shortcutDetails.targetMimeType : f.mimeType;
         
         if (actualMimeType === MIME_FOLDER) {
-            // התיקון כאן: אנחנו מתעדים במפה את מזהה היעד (targetId) ולא את מזהה הקיצור
             const targetId = isShortcut ? f.shortcutDetails.targetId : f.id;
             state.folderMap[targetId] = {
                 name: f.name,
@@ -803,7 +802,18 @@ function buildFolderMap() {
 }
 
 async function initDatabase() {
-    const dbName = "ArchiveCache";
+    // שינוי השם ל-V2 יכריח את הדפדפן למחוק את הקובץ השבור מהזיכרון ולהוריד את החדש
+    const dbName = "ArchiveCacheV2";
+    
+    // מנקה את הזיכרון הישן והשבור כדי לא לבזבז מקום במחשב של המשתמש
+    if ('caches' in window) {
+        caches.keys().then(names => {
+            for (let name of names) {
+                if (name === "ArchiveCache") caches.delete(name);
+            }
+        });
+    }
+
     try {
         let loadedFromCache = false;
         
